@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "857285693803",
+    "project_id": "baharfun-1e2e5",
+    "storage_bucket": "baharfun-1e2e5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:857285693803:android:b88c74fba50036ad9a7c2e",
+        "android_client_info": {
+          "package_name": "com.shipsapp.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "857285693803-qi3nmracfalrrpdu9d695nucc4j18mqm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD8bKiIx-wqFTqGP1fWVuonIn4nyHLjeHQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "857285693803-qi3nmracfalrrpdu9d695nucc4j18mqm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

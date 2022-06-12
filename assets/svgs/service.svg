@@ -1,0 +1,7 @@
+<svg id="vuesax_bulk_crown" data-name="vuesax/bulk/crown" xmlns="http://www.w3.org/2000/svg" width="20.038" height="20.038" viewBox="0 0 20.038 20.038">
+  <g id="crown">
+    <path id="Vector" d="M14.145,9.044A4.176,4.176,0,0,1,9.97,13.219H1.621a4.1,4.1,0,0,1-1.11-.15.709.709,0,0,1-.3-1.186L9.085,3.008A.789.789,0,0,1,9.8,2.832a.88.88,0,0,0,.768-.225L12.717.453c.785-.785,1.428-.526,1.428.593Z" transform="translate(4.224 3.722)" fill="#00a9ca"/>
+    <path id="Vector-2" data-name="Vector" d="M1.812,11.791a.838.838,0,0,1-1.336-.2A4.015,4.015,0,0,1,0,9.67v-8C0,.553.643.294,1.428,1.079L3.582,3.242a.857.857,0,0,0,1.186,0l2.989-3a.842.842,0,0,1,1.186,0l1.62,1.62a.849.849,0,0,1-.008,1.186Z" transform="translate(1.67 3.095)" fill="#00a9ca" opacity="0.4"/>
+    <path id="Vector-3" data-name="Vector" d="M20.038,0V20.038H0V0Z" fill="none" opacity="0"/>
+  </g>
+</svg>
