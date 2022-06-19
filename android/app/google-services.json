@@ -1,0 +1,90 @@
+{
+  "project_info": {
+    "project_number": "909320863727",
+    "project_id": "salon-bb8c0",
+    "storage_bucket": "salon-bb8c0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:909320863727:android:98f49ab4eb51b100e8001a",
+        "android_client_info": {
+          "package_name": "com.mmb.salon"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "909320863727-l203pvjm2e1l0qdmh3lvbo51tre9cls7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mmb.salon",
+            "certificate_hash": "b4398e91d840be3d3c9777e44176ed1d836919f7"
+          }
+        },
+        {
+          "client_id": "909320863727-vmi8b5vmgshe3lefv3j90mgn4qrmqkcr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKlv8pWVyZr9beNLzQ0WXXO49DT2v5hbg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "909320863727-vmi8b5vmgshe3lefv3j90mgn4qrmqkcr.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "909320863727-a9tg8oeefle5ku9bp7itdo2p3l4hognd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mmb.salonprovider"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:909320863727:android:47ee7505ae8cae36e8001a",
+        "android_client_info": {
+          "package_name": "com.mmb.salonprovider"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "909320863727-vmi8b5vmgshe3lefv3j90mgn4qrmqkcr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKlv8pWVyZr9beNLzQ0WXXO49DT2v5hbg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "909320863727-vmi8b5vmgshe3lefv3j90mgn4qrmqkcr.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "909320863727-a9tg8oeefle5ku9bp7itdo2p3l4hognd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mmb.salonprovider"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
