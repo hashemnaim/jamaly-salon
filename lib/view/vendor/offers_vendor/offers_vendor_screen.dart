@@ -596,10 +596,10 @@ class OfferVendorScreen extends StatelessWidget {
                                         children: [
                                           InkWell(
                                             onTap: () {
-                                              Get.to(EditOfferScreen(
-                                                myOfferModelData:
-                                                    myOfferModelData,
-                                              ));
+                                              Get.to(() => EditOfferScreen(
+                                                    myOfferModelData:
+                                                        myOfferModelData,
+                                                  ));
                                             },
                                             child: Row(
                                               children: [

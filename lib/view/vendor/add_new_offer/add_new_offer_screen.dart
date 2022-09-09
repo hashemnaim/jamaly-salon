@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/size_extension.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:yacht_booking/apis/home_vendor_apis.dart';
 import 'package:yacht_booking/common/app_colors.dart';
 import 'package:yacht_booking/common/assets.dart';
@@ -41,8 +40,11 @@ class _AddNewOfferScreenState extends State<AddNewOfferScreen> {
       country,
       name;
   String time, periodFrom;
-  TextEditingController timeFrom = TextEditingController(text: "من");
-  TextEditingController timeTo = TextEditingController(text: "الى");
+
+  TextEditingController timeFrom = TextEditingController(
+      text: DateFormat('jm').format(DateTime.now()).toString());
+  TextEditingController timeTo = TextEditingController(
+      text: DateFormat('jm').format(DateTime.now()).toString());
 
   setHourPrice(String value) {
     this.hourPrice = value;
@@ -89,8 +91,13 @@ class _AddNewOfferScreenState extends State<AddNewOfferScreen> {
     "دفع مبلغ الحجز كاملاً",
   ];
   List<String> listCountry = [
-    "امارات",
-    "دبي",
+    'أبوظبي',
+    'عجمان',
+    'دبي',
+    'الفجيرة',
+    'رأس الخيمة',
+    '	الشارقة',
+    '	أم القيوين',
   ];
   List<String> listTimeFrom = [
     "1 صباحا",
@@ -131,8 +138,8 @@ class _AddNewOfferScreenState extends State<AddNewOfferScreen> {
     DateTime newSelectedDate = await showDatePicker(
         context: context,
         initialDate: _selectedDate != null ? _selectedDate : DateTime.now(),
-        firstDate: DateTime(2000),
-        lastDate: DateTime(2040),
+        firstDate: DateTime.now(),
+        lastDate: DateTime(2023),
         builder: (BuildContext context, Widget child) {
           return Theme(
             data: ThemeData.dark().copyWith(
@@ -194,7 +201,7 @@ class _AddNewOfferScreenState extends State<AddNewOfferScreen> {
   }
 
   void _showDatePicker(ctx, TextEditingController text) {
-    // showCupertinoModalPopup is a built-in function of the cupertino library
+    text.text = DateFormat('jm').format(DateTime.now()).toString();
     showCupertinoModalPopup(
         context: ctx,
         builder: (_) => Container(
@@ -209,7 +216,7 @@ class _AddNewOfferScreenState extends State<AddNewOfferScreen> {
                         initialDateTime: DateTime.now(),
                         onDateTimeChanged: (val) {
                           setState(() {
-                            text.text = "${val.hour}:${val.minute}";
+                            text.text = DateFormat('jm').format(val).toString();
                           });
                         }),
                   ),
@@ -417,6 +424,10 @@ class _AddNewOfferScreenState extends State<AddNewOfferScreen> {
                           fillColor: Colors.white,
                           isBoxShadow: false,
                           onSaved: setName,
+                          isComplate: true,
+                          onFieldSubmitted: () {
+                            FocusScope.of(context).unfocus();
+                          },
                           validator: Helper.validationNull,
                           prefixIcon: Icon(
                             Icons.verified,
@@ -435,7 +446,7 @@ class _AddNewOfferScreenState extends State<AddNewOfferScreen> {
                             });
                           },
                           backgroundColor: Colors.white,
-                          fontColor: AppColors.hintColor,
+                          fontColor: Colors.black,
                           borderColor: AppColors.borderColor,
                           iconColor: AppColors.hintColor,
                           fontSize: 12,
@@ -447,6 +458,10 @@ class _AddNewOfferScreenState extends State<AddNewOfferScreen> {
                           fillColor: Colors.white,
                           isBoxShadow: false,
                           onSaved: setHourPrice,
+                          isComplate: true,
+                          onFieldSubmitted: () {
+                            FocusScope.of(context).unfocus();
+                          },
                           textInputType: TextInputType.number,
                           validator: Helper.validationNull,
                           prefixIcon: Icon(
@@ -473,7 +488,7 @@ class _AddNewOfferScreenState extends State<AddNewOfferScreen> {
                         SizedBox(height: 10.h),
                         InkWell(
                           onTap: () {
-                            homeVendorController.addImageOffers();
+                            homeVendorController.selectImage();
                           },
                           child: CustomTextFormField(
                             hintText: 'اضافة صور ',
@@ -481,6 +496,10 @@ class _AddNewOfferScreenState extends State<AddNewOfferScreen> {
                             isBoxShadow: false,
                             enabled: false,
                             onSaved: setTest,
+                            isComplate: true,
+                            onFieldSubmitted: () {
+                              FocusScope.of(context).unfocus();
+                            },
                             validator: Helper.validationnoo,
                             prefixIcon: Icon(
                               Icons.image_rounded,
@@ -513,7 +532,7 @@ class _AddNewOfferScreenState extends State<AddNewOfferScreen> {
                           id: "imagesOffers",
                           init: HomeVendorController(),
                           builder: (controller) {
-                            return controller.resultOffersPhoto.isEmpty
+                            return controller.imageList.isEmpty
                                 ? SizedBox()
                                 : Container(
                                     height: 75.h,
@@ -521,8 +540,7 @@ class _AddNewOfferScreenState extends State<AddNewOfferScreen> {
                                     child: ListView.separated(
                                       shrinkWrap: true,
                                       scrollDirection: Axis.horizontal,
-                                      itemCount:
-                                          controller.resultOffersPhoto.length,
+                                      itemCount: controller.imageList.length,
                                       separatorBuilder: (context, index) =>
                                           SizedBox(width: 5.w),
                                       itemBuilder: (context, index) =>
@@ -533,21 +551,21 @@ class _AddNewOfferScreenState extends State<AddNewOfferScreen> {
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(8.r),
-                                          image: DecorationImage(
-                                            image: AssetThumbImageProvider(
-                                                controller
-                                                    .resultOffersPhoto[index],
-                                                width: 100,
-                                                height: 75),
-                                            //  AssetImage(
-                                            //   Assets.getImage('bg'),
-                                            // ),
-                                            fit: BoxFit.cover,
-                                          ),
+                                          // image: DecorationImage(
+                                          //   image: AssetThumbImageProvider(
+                                          //       controller
+                                          //           .resultOffersPhoto[index],
+                                          //       width: 100,
+                                          //       height: 75),
+                                          //   //  AssetImage(
+                                          //   //   Assets.getImage('bg'),
+                                          //   // ),
+                                          //   fit: BoxFit.cover,
+                                          // ),
                                         ),
                                         child: InkWell(
                                           onTap: () {
-                                            controller.removeImageOffers(index);
+                                            controller.removeImage(index);
                                           },
                                           child: Align(
                                             alignment:
@@ -584,6 +602,10 @@ class _AddNewOfferScreenState extends State<AddNewOfferScreen> {
                             fillColor: Colors.white,
                             isBoxShadow: false,
                             enabled: false,
+                            isComplate: true,
+                            onFieldSubmitted: () {
+                              FocusScope.of(context).unfocus();
+                            },
                             onSaved: setTest,
                             validator: Helper.validationnoo,
                             prefixIcon: Icon(
@@ -622,6 +644,10 @@ class _AddNewOfferScreenState extends State<AddNewOfferScreen> {
                             fillColor: Colors.white,
                             isBoxShadow: false,
                             enabled: false,
+                            isComplate: true,
+                            onFieldSubmitted: () {
+                              FocusScope.of(context).unfocus();
+                            },
                             onSaved: setTest,
                             validator: Helper.validationnoo,
                             prefixIcon: Icon(
@@ -654,13 +680,15 @@ class _AddNewOfferScreenState extends State<AddNewOfferScreen> {
                         Row(
                           children: [
                             Expanded(
-                              flex: 2,
                               child: SvgRow(
                                 'time',
                                 'التوقيت ',
                                 svgColor: AppColors.primaryColor,
                                 fontWeight: FontWeight.bold,
                               ),
+                            ),
+                            SizedBox(
+                              width: 60.w,
                             ),
                             Expanded(
                                 child: InkWell(
@@ -669,9 +697,14 @@ class _AddNewOfferScreenState extends State<AddNewOfferScreen> {
                                 // _selectTime(context, timeFrom);
                               },
                               child: CustomTextFormField(
-                                hintText: timeFrom.text,
+                                hintText: "من",
                                 fillColor: Colors.white,
-                                isBoxShadow: false,
+                                textEditingController: timeFrom,
+                                // isBoxShadow: false,
+                                isComplate: true,
+                                onFieldSubmitted: () {
+                                  FocusScope.of(context).unfocus();
+                                },
                                 onSaved: setPeriodTime,
                                 validator: Helper.validationnoo,
                                 enabled: false,
@@ -684,9 +717,14 @@ class _AddNewOfferScreenState extends State<AddNewOfferScreen> {
                                 _showDatePicker(context, timeTo);
                               },
                               child: CustomTextFormField(
-                                hintText: timeTo.text,
+                                hintText: "الى",
                                 fillColor: Colors.white,
-                                isBoxShadow: false,
+                                // isBoxShadow: false,
+                                isComplate: true,
+                                textEditingController: timeTo,
+                                onFieldSubmitted: () {
+                                  FocusScope.of(context).unfocus();
+                                },
                                 onSaved: setPeriodTime,
                                 validator: Helper.validationnoo,
                                 enabled: false,
@@ -722,7 +760,12 @@ class _AddNewOfferScreenState extends State<AddNewOfferScreen> {
                                 fillColor: Colors.white,
                                 isBoxShadow: false,
                                 onSaved: setNoPerson,
+                                textInputType: TextInputType.number,
                                 validator: Helper.validationNull,
+                                isComplate: true,
+                                onFieldSubmitted: () {
+                                  FocusScope.of(context).unfocus();
+                                },
                                 prefixIcon: Icon(
                                   Icons.group,
                                   size: 22.r,
@@ -750,72 +793,86 @@ class _AddNewOfferScreenState extends State<AddNewOfferScreen> {
                           height: 55,
                         ),
                         SizedBox(height: 15.h),
-                        CustomTextFormField(
-                          hintText: 'مبلغ العربون',
-                          fillColor: Colors.white,
-                          isBoxShadow: false,
-                          textInputType: TextInputType.number,
-                          onSaved: setPrePrice,
-                          validator: Helper.validationNull,
-                          prefixIcon: Icon(
-                            Icons.monetization_on,
-                            size: 22.r,
-                            color: AppColors.primaryColor,
-                          ),
-                          suffixIcon: Padding(
-                            padding: EdgeInsetsDirectional.only(end: 10.w),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Container(
-                                  height: 30.h,
-                                  child: VerticalDivider(thickness: 1),
+                        cach == "دفع مبلغ الحجز كاملاً" || cach == ""
+                            ? Container()
+                            : CustomTextFormField(
+                                hintText: 'مبلغ العربون',
+                                fillColor: Colors.white,
+                                isBoxShadow: false,
+                                textInputType: TextInputType.number,
+                                onSaved: setPrePrice,
+                                validator: Helper.validationNull,
+                                isComplate: true,
+                                onFieldSubmitted: () {
+                                  FocusScope.of(context).unfocus();
+                                },
+                                prefixIcon: Icon(
+                                  Icons.monetization_on,
+                                  size: 22.r,
+                                  color: AppColors.primaryColor,
                                 ),
-                                CustomText(
-                                  'درهم',
-                                  fontSize: 10,
-                                  fontColor: AppColors.hintColor,
+                                suffixIcon: Padding(
+                                  padding:
+                                      EdgeInsetsDirectional.only(end: 10.w),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Container(
+                                        height: 30.h,
+                                        child: VerticalDivider(thickness: 1),
+                                      ),
+                                      CustomText(
+                                        'درهم',
+                                        fontSize: 10,
+                                        fontColor: AppColors.hintColor,
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 10.h),
-                        CustomTextFormField(
-                          hintText: 'مبلغ الحجز كاملاً',
-                          fillColor: Colors.white,
-                          isBoxShadow: false,
-                          onSaved: setTotalPrice,
-                          validator: Helper.validationNull,
-                          prefixIcon: Icon(
-                            Icons.monetization_on,
-                            size: 22.r,
-                            color: AppColors.primaryColor,
-                          ),
-                          suffixIcon: Padding(
-                            padding: EdgeInsetsDirectional.only(end: 10.w),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Container(
-                                  height: 30.h,
-                                  child: VerticalDivider(thickness: 1),
-                                ),
-                                CustomText(
-                                  'درهم',
-                                  fontSize: 10,
-                                  fontColor: AppColors.hintColor,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                              ),
+
+                        // SizedBox(height: 10.h),
+                        // CustomTextFormField(
+                        //   hintText: 'مبلغ الحجز كاملاً',
+                        //   fillColor: Colors.white,
+                        //   isBoxShadow: false,
+                        //   onSaved: setTotalPrice,
+                        //   textInputType: TextInputType.number,
+                        //   validator: Helper.validationNull,
+                        //   prefixIcon: Icon(
+                        //     Icons.monetization_on,
+                        //     size: 22.r,
+                        //     color: AppColors.primaryColor,
+                        //   ),
+                        //   suffixIcon: Padding(
+                        //     padding: EdgeInsetsDirectional.only(end: 10.w),
+                        //     child: Row(
+                        //       mainAxisSize: MainAxisSize.min,
+                        //       children: [
+                        //         Container(
+                        //           height: 30.h,
+                        //           child: VerticalDivider(thickness: 1),
+                        //         ),
+                        //         CustomText(
+                        //           'درهم',
+                        //           fontSize: 10,
+                        //           fontColor: AppColors.hintColor,
+                        //         ),
+                        //       ],
+                        //     ),
+                        //   ),
+                        // ),
+
                         SizedBox(height: 10.h),
                         CustomTextFormField(
                           hintText: 'يمكنك إضافة ملاحظات إضافية في العرض',
                           fillColor: Colors.white,
                           isBoxShadow: false,
                           maxLines: 3,
+                          isComplate: true,
+                          onFieldSubmitted: () {
+                            FocusScope.of(context).unfocus();
+                          },
                           onSaved: setNote,
                           validator: Helper.validationnoo,
                         ),
@@ -827,50 +884,46 @@ class _AddNewOfferScreenState extends State<AddNewOfferScreen> {
                   CustomButton(
                     text: 'اضافة العرض',
                     onTap: () {
-                      print('''
-                            $selectedIndex, 
-                            $hourPrice, 
-                            $prePrice, 
-                            $totalPrice, 
-                            $note, 
-                            
-                            $noPerson, 
-                            $cach, 
-                            $name, 
-                            $country, 
-                            ${fromDate.text}, 
-                            ${toDate.text}, 
-                            $time,
-                            ${timeFrom.text},
-                            ${timeTo.text}
-''');
-
                       if (addOffersFormKey.currentState.validate()) {
                         addOffersFormKey.currentState.save();
                         if (selectedIndex == null) {
                           Helper.getSheetError("يجب تحديد الخدمه");
                         } else {
-                          Get.back();
-                          HomeVendorApis.homeVendorApis.addShipOffers(
-                              homeVendorController.resultOffersPhoto,
-                              selectedIndex,
-                              hourPrice,
-                              prePrice,
-                              totalPrice,
-                              note,
-                              "1",
-                              noPerson,
-                              cach == "دفع مبلغ الحجز كاملاً"
-                                  ? "cash"
-                                  : "prepaid",
-                              name,
-                              country,
-                              fromDate.text,
-                              toDate.text,
-                              time,
-                              time,
-                              timeFrom.text,
-                              timeTo.text);
+                          if (homeVendorController.imageList.length == 0) {
+                            Helper.getSheetError("يجب اضافة صورة للخدمة");
+                          } else {
+                            print(homeVendorController.imageList);
+                            print(selectedIndex);
+                            print(hourPrice);
+                            print(prePrice);
+                            print(cach);
+                            print(noPerson);
+                            print(note);
+                            print(country);
+                            print(fromDate.text);
+                            print(toDate.text);
+                            print(time);
+                            HomeVendorApis.homeVendorApis.addShipOffers(
+                                homeVendorController.imageList,
+                                selectedIndex,
+                                hourPrice,
+                                cach == "دفع مبلغ الحجز كاملاً" ? "" : prePrice,
+                                hourPrice,
+                                note,
+                                "1",
+                                noPerson,
+                                cach == "دفع مبلغ الحجز كاملاً"
+                                    ? "cash"
+                                    : "prepaid",
+                                name,
+                                country,
+                                fromDate.text,
+                                toDate.text,
+                                time,
+                                prePrice,
+                                timeFrom.text,
+                                timeTo.text);
+                          }
                         }
                       }
                       // showDialog(

@@ -153,70 +153,80 @@ class OrderUserApi {
     String notes,
   ) async {
     try {
-      initDio();
-      ProgressDialogUtils.show();
-      String token = await SPHelper.spHelper.getToken();
-      FormData data = FormData.fromMap({
-        "from": from,
-        "to": to,
-        "service_id": serviceId,
-        "duration": duration,
-        "number_of_persones": numberOfPersones,
-        "date": date,
-        "price": price,
-        "notes": notes
-      });
-      Response response = await dio.post(
-        baseUrl + orderRequestEndPoint,
-        data: data,
-        options: Options(
-          headers: {
-            'Accept': '*/*',
-            'Authorization': 'Bearer $token',
-          },
-          validateStatus: (status) {
-            return status < 500;
-          },
+    initDio();
+    ProgressDialogUtils.show();
+
+    print(from);
+    print(to);
+    print(serviceId);
+    print(duration);
+    print(numberOfPersones);
+    print(date);
+    print(price);
+    print(notes);
+    String token = await SPHelper.spHelper.getToken();
+    FormData data = FormData.fromMap({
+      "from": from,
+      "to": to,
+      "service_id": serviceId,
+      "duration": duration,
+      "number_of_persones": numberOfPersones,
+      "date": date,
+      "price": price,
+      "notes": notes ?? ""
+    });
+    Response response = await dio.post(
+      baseUrl + orderRequestEndPoint,
+      data: data,
+      options: Options(
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+        // validateStatus: (status) {
+        //   return status < 500;
+        // },
+      ),
+    );
+    if (response.data['code'].toString() == '200') {
+      ProgressDialogUtils.hide();
+      orderOffers();
+
+      myGet.Get.back();
+
+      myGet.Get.defaultDialog(
+        title: 'تم تقديم الحجز  بنجاح وستصلك اشعارات بالعروض بمجرد توفرها',
+        radius: 10.r,
+        // titlePadding:
+        //     EdgeInsetsDirectional.only(top: 15.h, bottom: 4.h),
+        titleStyle: TextStyle(
+          fontSize: 14.sp,
+          color: AppColors.fontPrimaryColor,
+          fontWeight: FontWeight.bold,
+        ),
+        content: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SvgPicture.asset(
+              Assets.getIconSvg('request_success'),
+              fit: BoxFit.contain,
+              width: 150.r,
+              height: 150.r,
+            ),
+          ],
         ),
       );
-      if (response.data['code'].toString() == '200') {
-        ProgressDialogUtils.hide();
-        orderOffers();
-
+      Timer(Duration(seconds: 4), () {
         myGet.Get.back();
-
-        myGet.Get.defaultDialog(
-          title: 'تم تقديم الحجز  بنجاح وستصلك اشعارات بالعروض بمجرد توفرها',
-          radius: 10.r,
-          // titlePadding:
-          //     EdgeInsetsDirectional.only(top: 15.h, bottom: 4.h),
-          titleStyle: TextStyle(
-            fontSize: 14.sp,
-            color: AppColors.fontPrimaryColor,
-            fontWeight: FontWeight.bold,
-          ),
-          content: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SvgPicture.asset(
-                Assets.getIconSvg('request_success'),
-                fit: BoxFit.contain,
-                width: 150.r,
-                height: 150.r,
-              ),
-            ],
-          ),
-        );
-        Timer(Duration(seconds: 4), () {
-          myGet.Get.back();
-        });
-        //  Helper.getSheetSucsses(response.data['message']);
-      } else {
-        ProgressDialogUtils.hide();
-        Helper.getSheetError(response.data['message']);
-      }
-    } catch (e) {}
+      });
+      //  Helper.getSheetSucsses(response.data['message']);
+    } else {
+      ProgressDialogUtils.hide();
+      Helper.getSheetError(response.data['message']);
+    }
+    } catch (e) {
+      ProgressDialogUtils.hide();
+    }
   }
 
   //===========================================

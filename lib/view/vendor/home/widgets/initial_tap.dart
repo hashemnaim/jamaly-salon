@@ -27,7 +27,7 @@ class InitialTap extends StatelessWidget {
           ),
           SizedBox(height: 5.h),
           CustomText(
-            'هذا هو المكان الذي يمكنك فيه إدارة كل جانب من جوانب مكانك من المعلومات التي يراها الضيوف يمكنك العثور على المهام الأساسية لإكمال كل مهمة هو شيء نعلم أنه يساعد مالكي العقارات مثلك للحصول على حجزك الأول بشكل أسرع',
+            'هذا هو المكان الذي يمكنك فيه إدارة كل جانب من جوانب مكانك من المعلومات التي يراها الضيوف يمكنك العثور على المهام الأساسية لإكمال كل مهمة هو شيء نعلم أنه يساعد مالكي العقارات مثلك للحصول على طلبك الأول بشكل أسرع',
             maxLines: 10,
             fontSize: 10,
             textAlign: TextAlign.center,
@@ -82,7 +82,7 @@ class InitialTap extends StatelessWidget {
                       ),
                       SizedBox(width: 5.w),
                       CustomText(
-                        'حجزك حسب ميزانيتك',
+                        'طلبك حسب ميزانيتك',
                         textAlign: TextAlign.center,
                         fontWeight: FontWeight.bold,
                       ),
@@ -90,7 +90,7 @@ class InitialTap extends StatelessWidget {
                   ),
                   SizedBox(height: 5.h),
                   CustomText(
-                    'هنا يكون وصف خاص لخدمه حجزك حسب ميزانيتك',
+                    'هنا يكون وصف خاص لخدمه طلبك حسب ميزانيتك',
                     textAlign: TextAlign.center,
                     maxLines: 3,
                     fontSize: 12,
@@ -104,7 +104,7 @@ class InitialTap extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             CustomText(
-                              'حجزك حسب ميزانيتك',
+                              'طلبك حسب ميزانيتك',
                               fontWeight: FontWeight.bold,
                             ),
                             SizedBox(height: 5.h),

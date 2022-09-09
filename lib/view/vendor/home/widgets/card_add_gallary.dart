@@ -1,8 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
- import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:yacht_booking/apis/home_vendor_apis.dart';
 import 'package:yacht_booking/common/app_colors.dart';
 import 'package:yacht_booking/common/helper.dart';
@@ -121,7 +120,7 @@ class _CardAddImageState extends State<CardAddImage> {
                               CustomButton(
                                   text: "اختر صور",
                                   onTap: () {
-                                    controller.addImage2();
+                                    controller.selectImage();
                                     // return showCupertinoModalPopup<void>(
                                     //   context: context,
                                     //   builder: (BuildContext context) =>
@@ -161,27 +160,26 @@ class _CardAddImageState extends State<CardAddImage> {
                               SizedBox(
                                 height: 10.h,
                               ),
-                              controller.resultListFinal.isEmpty
+                              controller.imageList.isEmpty
                                   ? SizedBox()
                                   : Container(
                                       height: 100.h,
                                       child: ListView.builder(
-                                        itemCount:
-                                            controller.resultListFinal.length,
+                                        itemCount: controller.imageList.length,
                                         scrollDirection: Axis.horizontal,
                                         itemBuilder: (context, index) {
                                           return Stack(
                                             children: [
-                                              Container(
-                                                  margin: EdgeInsets.all(10.h),
-                                                  height: 70.h,
-                                                  width: 70.w,
-                                                  child: AssetThumb(
-                                                    asset: controller
-                                                        .resultListFinal[index],
-                                                    width: 100,
-                                                    height: 100,
-                                                  )),
+                                              // Container(
+                                              //     margin: EdgeInsets.all(10.h),
+                                              //     height: 70.h,
+                                              //     width: 70.w,
+                                              //     child: AssetThumb(
+                                              //       asset: controller
+                                              //           .resultListFinal[index],
+                                              //       width: 100,
+                                              //       height: 100,
+                                              //     )),
                                               Container(
                                                 margin: EdgeInsets.all(10.h),
                                                 height: 70.h,
@@ -219,7 +217,7 @@ class _CardAddImageState extends State<CardAddImage> {
                             if (shipId != null) {
                               Get.back();
                               HomeVendorApis.homeVendorApis.storeImagesGallery(
-                                  homeVendorController.resultListFinal,
+                                  homeVendorController.imageList,
                                   shipId.toString());
                             } else {
                               Helper.getSheetSucsses('قم باختيار العرض');

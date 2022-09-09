@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -40,20 +42,23 @@ class _ReservationConfirmationScreenState
   DateTime initDate = DateTime.now();
   DatePickerController datePickerController = DatePickerController();
   TimeOfDay _selectedTime;
-  TextEditingController timeFrom = TextEditingController(text: "من");
-  TextEditingController timeTo = TextEditingController(text: "الى");
+  TextEditingController timeFrom = TextEditingController(text: "");
+  TextEditingController timeTo = TextEditingController(text: "");
 
-  List<String> listPeriodFrom = [
-    "30 دقيقة",
-    "ساغه",
-    "ساعتين",
-    "3 ساعات",
-    "4 ساعات",
-    "5 ساعات",
-    "6 ساعات",
-    "7 ساعات",
-    "مخصص",
-  ];
+  Map<double, String> listPeriodFrom = {
+    0.5: "نصف",
+    1.0: "الافتراضي",
+    2.0: "2",
+    3.0: "3",
+    4.0: "4",
+    5.0: "5",
+    6.0: "6",
+    7.0: "7",
+    8.0: "8",
+
+    // 0.0: "مخصص",
+  };
+
   List<String> listPeriodTo = [
     "30 دقيقه",
   ];
@@ -88,8 +93,8 @@ class _ReservationConfirmationScreenState
     DateTime newSelectedDate = await showDatePicker(
         context: context,
         initialDate: initDate != null ? initDate : DateTime.now(),
-        firstDate: DateTime(2000),
-        lastDate: DateTime(2040),
+        firstDate: DateTime.now(),
+        lastDate: DateTime.now().add(Duration(days: 50)),
         builder: (BuildContext context, Widget child) {
           return Theme(
             data: ThemeData.dark().copyWith(
@@ -108,15 +113,12 @@ class _ReservationConfirmationScreenState
     if (newSelectedDate != null) {
       initDate = newSelectedDate;
       selectedDateNew = newSelectedDate;
-      // datePickerController.animateToDate(initDate);
-      // text
-      //   ..text = "${initDate.toLocal()}".split(' ')[0]
-      //   ..selection = TextSelection.fromPosition(TextPosition(
-      //       offset: text.text.length, affinity: TextAffinity.upstream));
+
       setState(() {});
     }
   }
 
+  double pricehuor = 1;
   _selectTime(BuildContext context, TextEditingController text) async {
     TimeOfDay newSelectedTime = await showTimePicker(
         context: context,
@@ -153,7 +155,6 @@ class _ReservationConfirmationScreenState
   }
 
   void _showDatePicker(ctx, TextEditingController text) {
-    // showCupertinoModalPopup is a built-in function of the cupertino library
     showCupertinoModalPopup(
         context: ctx,
         builder: (_) => Container(
@@ -172,8 +173,6 @@ class _ReservationConfirmationScreenState
                           });
                         }),
                   ),
-
-                  // Close the modal
                   CupertinoButton(
                     child: const Text('نعم'),
                     onPressed: () => Navigator.of(ctx).pop(),
@@ -236,33 +235,34 @@ class _ReservationConfirmationScreenState
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Container(
-                                  width: 80.w,
-                                  height: 80.h,
-                                  decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadiusDirectional.circular(10.r),
-                                    image: homeUserController.shipsDetaileData
-                                                .value.data.image ==
-                                            null
-                                        ? null
-                                        : DecorationImage(
-                                            image: AssetImage(
-                                                Assets.getImage('bg')),
-                                            fit: BoxFit.cover,
-                                          ),
-                                  ),
-                                  child: homeUserController.shipsDetaileData
-                                              .value.data.image ==
-                                          null
-                                      ? SizedBox()
-                                      : CachedNetworkImageShare(
-                                          homeUserController.shipsDetaileData
-                                              .value.data.image,
-                                          80.r,
-                                          80.r,
-                                          10.r),
-                                ),
+                                // Container(
+                                //   width: 80.w,
+                                //   height: 80.h,
+                                //   decoration: BoxDecoration(
+                                //     borderRadius:
+                                //         BorderRadiusDirectional.circular(10.r),
+                                //     image: homeUserController.shipsDetaileData
+                                //                 .value.data.image ==
+                                //             null
+                                //         ? null
+                                //         : DecorationImage(
+                                //             image: AssetImage(
+                                //                 Assets.getImage('bg')),
+                                //             fit: BoxFit.cover,
+                                //           ),
+                                //   ),
+                                //   child: homeUserController.shipsDetaileData
+                                //               .value.data.image ==
+                                //           null
+                                //       ? SizedBox()
+                                //       : CachedNetworkImageShare(
+                                //           homeUserController.shipsDetaileData
+                                //               .value.data.image,
+                                //           80.r,
+                                //           80.r,
+                                //           10.r),
+                                // ),
+
                                 SizedBox(width: 5.w),
                                 Expanded(
                                   child: Column(
@@ -505,20 +505,10 @@ class _ReservationConfirmationScreenState
                                 children: [
                                   CustomText(
                                     'الخدمات المقدمة  :',
+                                    fontSize: 15,
                                     fontColor: AppColors.primaryColor,
                                     fontWeight: FontWeight.bold,
                                   ),
-                                  // InkWell(
-                                  //   onTap: () {
-                                  //     Get.to(ChatScreen());
-                                  //   },
-                                  //   child: SvgRow(
-                                  //     'messages',
-                                  //     'مراسلة فورية',
-                                  //     fontColor: AppColors.primaryColor,
-                                  //     svgColor: AppColors.primaryColor,
-                                  //   ),
-                                  // ),
                                 ],
                               ),
                               SizedBox(height: 10.h),
@@ -554,26 +544,29 @@ class _ReservationConfirmationScreenState
                                                   ? ""
                                                   : '${servicesShip.services.title ?? ""}',
                                               svgColor: AppColors.primaryColor,
-                                              fontSize: 10,
+                                              fontSize: 12,
                                               fontWeight: FontWeight.bold,
                                               svgHeight: 15,
                                               svgWidth: 15,
                                             );
                                           },
                                         ),
-                              SizedBox(height: 10.h),
+                              // SizedBox(height: 8.h),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Divider(),
+                              ),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   CustomText(
                                     'تفاصيل العرض:',
-                                    fontSize: 12,
+                                    fontSize: 15,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ],
                               ),
-
                               SizedBox(height: 10.h),
                               Row(
                                 mainAxisAlignment:
@@ -603,7 +596,8 @@ class _ReservationConfirmationScreenState
                                       borderRadius: BorderRadius.circular(10.r),
                                     ),
                                     child: CustomText(
-                                      '${homeUserController.shipsDetaileData.value.data.price} درهم',
+                                      '${homeUserController.shipsDetaileData.value.data.price} درهم ' +
+                                          '/ ${homeUserController.shipsDetaileData.value.data.price_for} ${homeUserController.shipsDetaileData.value.data.price_for.toString() == "1" ? 'ساعة' : 'ساعات'}',
                                       fontSize: 10,
                                       fontColor: AppColors.fontSecondaryColor,
                                       fontWeight: FontWeight.bold,
@@ -742,24 +736,26 @@ class _ReservationConfirmationScreenState
                                       ),
                                     ],
                                   ),
-                                  Container(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 10.w, vertical: 2.h),
-                                    decoration: BoxDecoration(
-                                      color:
-                                          AppColors.hintColor.withOpacity(0.4),
-                                      borderRadius: BorderRadius.circular(10.r),
-                                    ),
-                                    child: CustomText(
-                                      '${homeUserController.shipsDetaileData.value.data.number_of_persones ?? "0"}',
-                                      fontSize: 10,
-                                      fontColor: AppColors.fontSecondaryColor,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
+
+                                  // Container(
+                                  //   padding: EdgeInsets.symmetric(
+                                  //       horizontal: 10.w, vertical: 2.h),
+                                  //   decoration: BoxDecoration(
+                                  //     color:
+                                  //         AppColors.hintColor.withOpacity(0.4),
+                                  //     borderRadius: BorderRadius.circular(10.r),
+                                  //   ),
+                                  //   child: CustomText(
+                                  //     '${homeUserController.shipsDetaileData.value.data.number_of_persones ?? "0"}',
+                                  //     fontSize: 10,
+                                  //     fontColor: AppColors.fontSecondaryColor,
+                                  //     fontWeight: FontWeight.bold,
+                                  //   ),
+                                  // ),
                                 ],
                               ),
                               SizedBox(height: 10.h),
+
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -791,7 +787,7 @@ class _ReservationConfirmationScreenState
                                               BorderRadius.circular(10.r),
                                         ),
                                         child: CustomText(
-                                          'من ${homeUserController.shipsDetaileData.value.data.start_date}',
+                                          'من ${homeUserController.shipsDetaileData.value.data.start_date ?? "تسجيل العرض"}',
                                           fontSize: 10,
                                           fontColor:
                                               AppColors.fontSecondaryColor,
@@ -809,7 +805,7 @@ class _ReservationConfirmationScreenState
                                               BorderRadius.circular(10.r),
                                         ),
                                         child: CustomText(
-                                          'إلى ${homeUserController.shipsDetaileData.value.data.end_date}',
+                                          'إلى ${homeUserController.shipsDetaileData.value.data.end_date ?? "تسجيل العرض"}',
                                           fontSize: 10,
                                           fontColor:
                                               AppColors.fontSecondaryColor,
@@ -820,58 +816,50 @@ class _ReservationConfirmationScreenState
                                   ),
                                 ],
                               ),
-                              SizedBox(height: 15.h),
-                              // CustomText(
-                              //   'الصور ',
-                              //   alignment: AlignmentDirectional.centerStart,
-                              //   fontWeight: FontWeight.bold,
-                              // ),
-                              // SizedBox(height: 10.h),
-                              // SizedBox(
-                              //   height: 74.h,
-                              //   child: homeUserController.shipsDetaileData.value
-                              //           .data.gallary.isEmpty
-                              //       ? Center(
-                              //           child: CustomText("لا يوجد صور"),
-                              //         )
-                              //       : ListView.separated(
-                              //           scrollDirection: Axis.horizontal,
-                              //           itemCount: homeUserController
-                              //               .shipsDetaileData
-                              //               .value
-                              //               .data
-                              //               .gallary
-                              //               .length,
-                              //           separatorBuilder: (context, index3) =>
-                              //               SizedBox(width: 10.w),
-                              //           itemBuilder: (context, index3) {
-                              //             return Container(
-                              //               height: 60.h,
-                              //               width: 116.w,
-                              //               decoration: BoxDecoration(
-                              //                 borderRadius:
-                              //                     BorderRadius.circular(10.r),
-                              //                 image: DecorationImage(
-                              //                   image:
-                              //                       CachedNetworkImageProvider(
-                              //                           homeUserController
-                              //                               .shipsDetaileData
-                              //                               .value
-                              //                               .data
-                              //                               .gallary[index3]
-                              //                               .imageUrl),
-                              //                   fit: BoxFit.cover,
-                              //                 ),
-                              //               ),
-                              //             );
-                              //           },
-                              //         ),
-                              // ),
+                              SizedBox(height: 10.h),
 
-                              SizedBox(height: 12.h),
+                              Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        Icons.image,
+                                        size: 18.r,
+                                        color: AppColors.primaryColor,
+                                      ),
+                                      SizedBox(width: 5.w),
+                                      CustomText(
+                                        'الصور',
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 6.h),
+                                  Row(
+                                    children: [
+                                      CachedNetworkImageShare(
+                                          homeUserController.shipsDetaileData
+                                              .value.data.image,
+                                          100,
+                                          100,
+                                          10)
+                                    ],
+                                  ),
+                                ],
+                              ),
+
+                              SizedBox(height: 6.h),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Divider(),
+                              ),
                               CustomText(
-                                'تفاصيل الحجز:',
+                                'احجز الان :',
                                 fontWeight: FontWeight.bold,
+                                fontSize: 16,
                                 alignment: AlignmentDirectional.centerStart,
                               ),
                               SizedBox(height: 10.h),
@@ -888,29 +876,26 @@ class _ReservationConfirmationScreenState
                                   ),
                                   Expanded(
                                       child: CustomDropDown(
-                                    value: periodFrom,
+                                    value: pricehuor == 1.0
+                                        ? "الافتراضي"
+                                        : periodFrom,
+                                    fontColor: Color.fromRGBO(0, 0, 0, 0.38),
                                     hint: "ساعة",
                                     onChanged: (val) {
+                                      log(periodFrom.toString());
+
                                       setPeriodTime(val);
+                                      pricehuor = listPeriodFrom.keys
+                                          .firstWhere(
+                                              (k) => listPeriodFrom[k] == val,
+                                              orElse: () => null);
                                     },
-                                    itemsList: listPeriodFrom,
+                                    itemsList: listPeriodFrom.values.toList(),
                                   )),
-                                  // SizedBox(width: 8.w),
-                                  // Expanded(
-                                  //     child: CustomDropDown(
-                                  //       value: periodTo,
-                                  //       hint: "دقيقة",
-                                  //       onChanged: (val) {
-                                  //         setState(() {
-                                  //           periodTo = val;
-                                  //         });
-                                  //       },
-                                  //       itemsList:listPeriodTo,
-                                  //     )),
                                 ],
                               ),
                               Visibility(
-                                  visible: periodFrom == "مخصص",
+                                  visible: pricehuor == 0,
                                   child: Column(
                                     children: [
                                       SizedBox(height: 8.h),
@@ -918,6 +903,7 @@ class _ReservationConfirmationScreenState
                                         hintText: 'المدة الزمنية',
                                         fillColor: Colors.white,
                                         isBoxShadow: false,
+                                        textInputType: TextInputType.number,
                                         onSaved: setPeriodTime,
                                         validator: Helper.validationNull,
                                         prefixIcon: Icon(
@@ -944,28 +930,17 @@ class _ReservationConfirmationScreenState
                                       child: InkWell(
                                     onTap: () {
                                       _showDatePicker(context, timeFrom);
-                                      // _selectTime(context, timeFrom);
                                     },
                                     child: CustomTextFormField(
-                                      hintText: timeFrom.text,
+                                      hintText: "من",
+                                      textEditingController: timeFrom,
                                       fillColor: Colors.white,
                                       isBoxShadow: false,
                                       onSaved: setPeriodTime,
                                       validator: Helper.validationNull,
                                       enabled: false,
                                     ),
-                                  )
-                                      // CustomDropDown(
-                                      //   value: timeFrom,
-                                      //   hint: "من",
-                                      //   onChanged: (val) {
-                                      //     setState(() {
-                                      //       timeFrom = val;
-                                      //     });
-                                      //   },
-                                      //   itemsList: listTimeFrom,
-                                      // ),
-                                      ),
+                                  )),
                                   SizedBox(width: 8.w),
                                   Expanded(
                                       child: InkWell(
@@ -973,25 +948,15 @@ class _ReservationConfirmationScreenState
                                       _showDatePicker(context, timeTo);
                                     },
                                     child: CustomTextFormField(
-                                      hintText: timeTo.text,
+                                      hintText: "الى",
+                                      textEditingController: timeTo,
                                       fillColor: Colors.white,
                                       isBoxShadow: false,
                                       onSaved: setPeriodTime,
                                       validator: Helper.validationNull,
                                       enabled: false,
                                     ),
-                                  )
-                                      //     CustomDropDown(
-                                      //   value: timeTo,
-                                      //   hint: "الى",
-                                      //   onChanged: (val) {
-                                      //     setState(() {
-                                      //       timeTo = val;
-                                      //     });
-                                      //   },
-                                      //   itemsList: listTimeTo,
-                                      // )
-                                      ),
+                                  )),
                                 ],
                               ),
                               SizedBox(height: 8.h),
@@ -1020,7 +985,11 @@ class _ReservationConfirmationScreenState
                                   ),
                                 ],
                               ),
-                              SizedBox(height: 20.h),
+                              // SizedBox(height: 10.h),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Divider(),
+                              ),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -1029,6 +998,7 @@ class _ReservationConfirmationScreenState
                                   CustomText(
                                     'تاريخ الحجز:',
                                     fontWeight: FontWeight.bold,
+                                    fontSize: 15,
                                     alignment: AlignmentDirectional.centerStart,
                                   ),
                                   InkWell(
@@ -1058,94 +1028,37 @@ class _ReservationConfirmationScreenState
                                   ),
                                 ],
                               ),
-                              SizedBox(height: 12.h),
-                              // DatePicker2(
-                              //   DateTime.now(),
-                              //   height: 70.h,
-                              //   locale: 'ar',
-                              //   initialSelectedDate: initDate,
-                              //   // controller: datePickerController,
-                              //   selectionColor: AppColors.primaryColor,
-                              //   deactivatedColor: AppColors.secondaryColor,
-                              //   selectedTextColor: Colors.white,
-                              //   dateTextStyle: TextStyle(
-                              //     color: AppColors.fontPrimaryColor,
-                              //     fontSize: 13.sp,
-                              //     letterSpacing: 0,
-                              //   ),
-                              //   dayTextStyle: TextStyle(
-                              //     color: AppColors.fontPrimaryColor,
-                              //     fontSize: 9.sp,
-                              //     letterSpacing: 0,
-                              //   ),
-                              //   monthTextStyle: TextStyle(
-                              //     color: AppColors.fontPrimaryColor,
-                              //     fontSize: 9.sp,
-                              //     letterSpacing: 0,
-                              //   ),
-                              //   onDateChange: (date) {
-                              //     setState(() {
-                              //       selectedDateNew = date;
-                              //     });
-                              //     print(
-                              //         "sssssssssssssssssssssssssssssssssss ${selectedDateNew.year}");
-                              //   },
-                              // ),
-                              SizedBox(height: 20.h),
+                              SizedBox(height: 10.h),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Divider(),
+                              ),
                               Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   CustomText(
-                                    'طريقة الدفع:',
+                                    'طريقة الدفع :',
                                     fontWeight: FontWeight.bold,
+                                    fontSize: 15,
                                     alignment: AlignmentDirectional.centerStart,
                                   ),
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      SizedBox(
-                                        width: 24.w,
-                                        height: 24.h,
-                                        child: Checkbox(
-                                            value: isCompleat,
-                                            onChanged: (val) {
-                                              isCompleat2 = false;
-                                              isCompleat = true;
-                                              setState(() {});
-                                            }),
-                                      ),
-                                      SizedBox(width: 3.w),
-                                      CustomText(
-                                        'دفع عربون فقط',
-                                        alignment:
-                                            AlignmentDirectional.centerStart,
-                                        fontSize: 10,
-                                      ),
-                                      SizedBox(width: 15.w),
-                                      SizedBox(
-                                        width: 24.w,
-                                        height: 24.h,
-                                        child: Checkbox(
-                                            value: isCompleat2,
-                                            onChanged: (val) {
-                                              isCompleat2 = true;
-                                              isCompleat = false;
-                                              setState(() {});
-                                            }),
-                                      ),
-                                      SizedBox(width: 3.w),
-                                      CustomText(
-                                        'دفع مبلغ الحجز كاملاً',
-                                        alignment:
-                                            AlignmentDirectional.centerStart,
-                                        fontSize: 10,
-                                      ),
-                                    ],
-                                  ),
+                                  SizedBox(width: 8.w),
+                                  homeUserController.shipsDetaileData.value.data
+                                              .prepaid ==
+                                          "0"
+                                      ? CustomText(
+                                          'دفع عربون فقط',
+                                          alignment:
+                                              AlignmentDirectional.centerStart,
+                                          fontSize: 10,
+                                        )
+                                      : CustomText(
+                                          'دفع مبلغ الحجز كاملاً',
+                                          alignment:
+                                              AlignmentDirectional.centerStart,
+                                          fontSize: 10,
+                                        ),
                                 ],
                               ),
                               SizedBox(height: 20.h),
@@ -1160,7 +1073,7 @@ class _ReservationConfirmationScreenState
                                   color: AppColors.secondaryColor,
                                 ),
                                 child: CustomText(
-                                  'المبلغ الأجمالي: ${homeUserController.shipsDetaileData.value.data.price} درهم',
+                                  'المبلغ الأجمالي: ${(double.parse(homeUserController.shipsDetaileData.value.data.price.toString()) * pricehuor).toInt()} درهم',
                                   fontColor: AppColors.fontSecondaryColor,
                                 ),
                               ),
@@ -1168,22 +1081,43 @@ class _ReservationConfirmationScreenState
                               CustomButton(
                                   text: 'تأكيد الحجز',
                                   onTap: () {
-                                    OrderUserApi.orderUserApi.sendOrder(
-                                        timeFrom.text,
-                                        timeTo.text,
-                                        homeUserController
-                                            .shipsDetaileData.value.data.id
-                                            .toString(),
-                                        isCompleat2 ? "cash" : "prepaid",
-                                        homeUserController.getProfileUserData
-                                            .value.data.mobile,
-                                        periodFrom,
-                                        noPerson,
-                                        "${selectedDateNew.day}/${selectedDateNew.month}/${selectedDateNew.year}",
-                                        homeUserController
-                                            .shipsDetaileData.value.data.price
-                                            .toString());
-
+                                    if (selectedDateNew == null) {
+                                      Helper.getSheetError(
+                                          "تأكيد من تاريخ الحجز");
+                                    } else {
+                                      if (timeTo.text == "" &&
+                                          timeFrom.text == "") {
+                                        Helper.getSheetError(
+                                            "تأكيد من وقت الحجز");
+                                      } else if (noPerson == null) {
+                                        Helper.getSheetError(
+                                            "تأكيد من عدد الاشخاص");
+                                      } else {
+                                        OrderUserApi.orderUserApi.sendOrder(
+                                            timeFrom.text,
+                                            timeTo.text,
+                                            homeUserController
+                                                .shipsDetaileData.value.data.id
+                                                .toString(),
+                                            isCompleat2 ? "cash" : "prepaid",
+                                            homeUserController
+                                                .getProfileUserData
+                                                .value
+                                                .data
+                                                .mobile,
+                                            periodFrom,
+                                            noPerson,
+                                            "${selectedDateNew.day}/${selectedDateNew.month}/${selectedDateNew.year}",
+                                            (double.parse(homeUserController
+                                                        .shipsDetaileData
+                                                        .value
+                                                        .data
+                                                        .price
+                                                        .toString()) *
+                                                    pricehuor)
+                                                .toString());
+                                      }
+                                    }
                                     // Get.defaultDialog(
                                     //   title: 'تم تأكيد الحجز بنجاح',
                                     //   radius: 10.r,
@@ -1217,6 +1151,5 @@ class _ReservationConfirmationScreenState
         ),
       );
     });
-    ;
   }
 }

@@ -1,13 +1,12 @@
-import 'dart:ui';
+import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:smooth_star_rating/smooth_star_rating.dart';
 import 'package:yacht_booking/apis/home_apis.dart';
 import 'package:yacht_booking/common/app_colors.dart';
 import 'package:yacht_booking/common/assets.dart';
@@ -22,12 +21,15 @@ import 'package:yacht_booking/view/user/submit_request/submit_request_screen.dar
 import 'package:yacht_booking/view/widgets/cash_network_image_share.dart';
 import 'package:yacht_booking/view/widgets/custom_text.dart';
 
+import '../../../../controller/user/auth_controller.dart';
+
 class AllTap extends StatelessWidget {
   AllTap({
     Key key,
   }) : super(key: key);
   final List<String> imageList = ['ship_1', 'ship_2', 'ship_3'];
   HomeUserController homeUserController = Get.find();
+  AuthController authController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -46,12 +48,6 @@ class AllTap extends StatelessWidget {
                   alignment: AlignmentDirectional.centerStart,
                   fontWeight: FontWeight.bold,
                 ),
-                // CustomText(
-                //   'عرض الكل',
-                //   alignment: AlignmentDirectional.centerStart,
-                //   fontWeight: FontWeight.bold,
-                //   fontSize: 11,
-                // ),
               ],
             ),
             SizedBox(height: 5.h),
@@ -92,6 +88,7 @@ class AllTap extends StatelessWidget {
                                     .getCategoriesData.value.data[index];
                             return InkWell(
                               onTap: () {
+                                log("getOwnersServiceByCategoryId");
                                 HomeUserApis.homeUserApis
                                     .getOwnersServiceByCategoryId(
                                   categoriesModelData.id.toString(),
@@ -100,9 +97,10 @@ class AllTap extends StatelessWidget {
                               },
                               borderRadius: BorderRadius.circular(10.r),
                               child: Container(
-                                width: 80.w,
+                                width: 78.w,
                                 height: 100.h,
-                                margin: EdgeInsets.symmetric(vertical: 10.h),
+                                margin: EdgeInsets.symmetric(
+                                    vertical: 10.h, horizontal: 1),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(9.0),
                                   color: Colors.white,
@@ -120,18 +118,22 @@ class AllTap extends StatelessWidget {
                                   children: [
                                     Expanded(
                                       child: CachedNetworkImageShare(
-                                          categoriesModelData.image, 48, 48, 1),
+                                        categoriesModelData.image,
+                                        50.h,
+                                        50.w,
+                                        1,
+                                      ),
                                     ),
                                     SizedBox(
                                       height: 5.h,
                                     ),
                                     CustomText(
                                       '${categoriesModelData.title}',
-                                      fontSize: 12.0,
+                                      fontSize: 12,
                                       fontColor: const Color(0xFF161617),
                                       fontWeight: FontWeight.w600,
                                       // height: 1.92,
-                                      alignment: AlignmentDirectional.center,
+                                      // alignment: AlignmentDirectional.center,
                                     ),
                                     SizedBox(
                                       height: 7.h,
@@ -139,66 +141,6 @@ class AllTap extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              // child: Container(
-                              //   width: 150.w,
-                              //   height: 80.h,
-                              //   decoration: BoxDecoration(
-                              //     borderRadius: BorderRadius.circular(10.r),
-                              //     border: Border.all(
-                              //       width: 1.2,
-                              //       color: Colors.grey,
-                              //     ),
-                              //     image: DecorationImage(
-                              //       image: categoriesModelData.image == null
-                              //           ? AssetImage(Assets.getImage('bg'))
-                              //           : CachedNetworkImageProvider(
-                              //               categoriesModelData.image,
-                              //             ),
-                              //       fit: BoxFit.cover,
-                              //     ),
-                              //   ),
-                              //   child: Padding(
-                              //     padding: EdgeInsetsDirectional.all(5.r),
-                              //     child: Column(
-                              //       mainAxisAlignment:
-                              //           MainAxisAlignment.spaceBetween,
-                              //       children: [
-                              //         CustomText(
-                              //           '${categoriesModelData.title}',
-                              //           fontColor: AppColors.primaryColor,
-                              //           fontWeight: FontWeight.bold,
-                              //           alignment:
-                              //               AlignmentDirectional.centerStart,
-                              //           fontSize: 16,
-                              //         ),
-                              //         // Row(
-                              //         //   mainAxisAlignment:
-                              //         //       MainAxisAlignment.end,
-                              //         //   children: [
-                              //         //     SmoothStarRating(
-                              //         //       allowHalfRating: false,
-                              //         //       onRated: (v) {},
-                              //         //       starCount: 5,
-                              //         //       rating: 4.5,
-                              //         //       size: 15.r,
-                              //         //       isReadOnly: true,
-                              //         //       color: AppColors.yellow,
-                              //         //       borderColor: AppColors.yellow,
-                              //         //       spacing: 0.0,
-                              //         //     ),
-                              //         //     SizedBox(width: 5.w),
-                              //         //     CustomText(
-                              //         //       '5.0',
-                              //         //       fontColor: Colors.white,
-                              //         //       fontWeight: FontWeight.bold,
-                              //         //       fontSize: 12,
-                              //         //     ),
-                              //         //   ],
-                              //         // )
-                              //       ],
-                              //     ),
-                              //   ),
-                              // ),
                             );
                           },
                         ),
@@ -258,15 +200,6 @@ class AllTap extends StatelessWidget {
                                       child: Container(
                                         height: 35.h,
                                         width: 70.w,
-                                        // decoration: BoxDecoration(
-                                        //   color: AppColors.primaryColor,
-                                        //   borderRadius:
-                                        //       BorderRadiusDirectional.only(
-                                        //     bottomEnd: Radius.circular(15.r),
-                                        //     topEnd: Radius.circular(15.r),
-                                        //   ),
-                                        //   boxShadow: AppColors.boxShadow,
-                                        // ),
                                         child: Stack(
                                           children: [
                                             SvgPicture.asset(
@@ -378,7 +311,8 @@ class AllTap extends StatelessWidget {
                               onTap: () {
                                 HomeUserApis.homeUserApis.getShipDetails(
                                     topRatOfferModelData.id.toString());
-                                Get.to(ReservationConfirmationScreen(true));
+                                Get.to(
+                                    () => ReservationConfirmationScreen(true));
                               },
                               borderRadius: BorderRadius.circular(10.r),
                               child: Container(
@@ -449,26 +383,6 @@ class AllTap extends StatelessWidget {
                                           )
                                         ],
                                       ),
-                                      // child: Container(
-                                      //   height: 35.h,
-                                      //   width: 70.w,
-                                      //   decoration: BoxDecoration(
-                                      //     color: AppColors.primaryColor,
-                                      //     borderRadius:
-                                      //         BorderRadiusDirectional.only(
-                                      //       bottomEnd: Radius.circular(15.r),
-                                      //       topEnd: Radius.circular(15.r),
-                                      //     ),
-                                      //     boxShadow: AppColors.boxShadow,
-                                      //   ),
-                                      //   child: CustomText(
-                                      //     Helper.limitString(
-                                      //         topRatOfferModelData.title, 15),
-                                      //     fontWeight: FontWeight.bold,
-                                      //     fontColor: Colors.white,
-                                      //     fontSize: 12,
-                                      //   ),
-                                      // ),
                                     ),
                                     Padding(
                                       padding: EdgeInsets.all(8.r),
@@ -476,36 +390,37 @@ class AllTap extends StatelessWidget {
                                         mainAxisAlignment:
                                             MainAxisAlignment.end,
                                         children: [
-                                          // CustomText(
-                                          //   '${topRatOfferModelData.title ?? ''}',
-                                          //   fontColor: Colors.white,
-                                          //   fontWeight: FontWeight.bold,
-                                          //   alignment: AlignmentDirectional
-                                          //       .centerStart,
-                                          //   fontSize: 18,
-                                          // ),
                                           Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.end,
                                             children: [
-                                              SmoothStarRating(
-                                                  allowHalfRating: false,
-                                                  onRated: (v) {},
-                                                  starCount: 5,
-                                                  rating: topRatOfferModelData
-                                                              .rate ==
-                                                          null
-                                                      ? 0
-                                                      : double.parse(
-                                                              topRatOfferModelData
-                                                                  .rate
-                                                                  .toString()) ??
-                                                          0,
-                                                  size: 15,
-                                                  isReadOnly: true,
-                                                  color: AppColors.yellow,
-                                                  borderColor: AppColors.yellow,
-                                                  spacing: 0.0),
+                                              RatingBar.builder(
+                                                initialRating:
+                                                    topRatOfferModelData.rate ==
+                                                            null
+                                                        ? 0
+                                                        : double.parse(
+                                                            topRatOfferModelData
+                                                                .rate
+                                                                .toString()),
+                                                direction: Axis.horizontal,
+                                                tapOnlyMode: true,
+                                                ignoreGestures: true,
+                                                allowHalfRating: true,
+                                                itemCount: 5,
+                                                itemSize: 16,
+                                                itemPadding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 1.0),
+                                                itemBuilder: (context, _) =>
+                                                    const Icon(
+                                                  Icons.star,
+                                                  color: Colors.amber,
+                                                  size: 1,
+                                                ),
+                                                onRatingUpdate: (rating) =>
+                                                    null,
+                                              ),
                                               SizedBox(width: 5.w),
                                               CustomText(
                                                 '${topRatOfferModelData.rate ?? 0}',
@@ -523,7 +438,7 @@ class AllTap extends StatelessWidget {
                           },
                         ),
             ),
-            SizedBox(height: 15.h),
+            SizedBox(height: 28.h),
             InkWell(
               onTap: () {
                 Get.to(() => SubmitRequestScreen());
@@ -551,20 +466,23 @@ class AllTap extends StatelessWidget {
                         ),
                         SizedBox(width: 5.w),
                         CustomText(
-                          'حجزك حسب ميزانيتك',
+                          'طلبك حسب ميزانيتك',
                           textAlign: TextAlign.center,
                           fontWeight: FontWeight.bold,
-                          fontSize: 11.0,
+                          fontSize: 15,
                           fontColor: const Color(0xFF00A9CA),
                         ),
                       ],
                     ),
                     SizedBox(height: 5.h),
                     CustomText(
-                      'اختر نوع الخدمه المناسبة لميزانيتك من خلال الضغط على حجزك الخدمه',
+                      authController.settingAppData.value.settingAppData == null
+                          ? ""
+                          : authController
+                              .settingAppData.value.settingAppData[0].orderText,
                       textAlign: TextAlign.center,
                       maxLines: 3,
-                      fontSize: 10.0,
+                      fontSize: 13,
                       fontColor: const Color(0xFF161617).withOpacity(0.6),
                       fontWeight: FontWeight.w600,
                       height: 1.2,

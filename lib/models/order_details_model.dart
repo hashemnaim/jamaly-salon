@@ -26,7 +26,7 @@ class OwnerDetailsModel {
     data['status'] = this.status;
     data['message'] = this.message;
     data['starts'] = this.starts;
- 
+
     if (this.data != null) {
       data['data'] = this.data.toJson();
     }
@@ -103,7 +103,7 @@ class OwnerDetailsModelData {
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     isFavourite = json['is_favourite'];
-   
+
     if (json['gallary'] != null) {
       gallary = new List<Gallary>();
       json['gallary'].forEach((v) {
@@ -180,14 +180,22 @@ class Gallary {
   var id;
   var image;
   var ownerId;
+  var ship_id;
   var createdAt;
   var updatedAt;
 
-  Gallary({this.id, this.image, this.ownerId, this.createdAt, this.updatedAt});
+  Gallary(
+      {this.id,
+      this.image,
+      this.ownerId,
+      this.ship_id,
+      this.createdAt,
+      this.updatedAt});
 
   Gallary.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     image = json['image_url'];
+    ship_id = json['ship_id'];
     ownerId = json['owner_id'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
@@ -197,6 +205,7 @@ class Gallary {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['image_url'] = this.image;
+    data['ship_id'] = this.ship_id;
     data['owner_id'] = this.ownerId;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;

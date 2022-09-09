@@ -32,6 +32,7 @@ class SettingAppData {
   SettingAppData({
     this.id,
     this.logo,
+    this.orderText,
     this.logoPosition,
     this.createdAt,
     this.updatedAt,
@@ -39,6 +40,7 @@ class SettingAppData {
 
   int id;
   String logo;
+  String orderText;
   String logoPosition;
   DateTime createdAt;
   DateTime updatedAt;
@@ -46,6 +48,7 @@ class SettingAppData {
   factory SettingAppData.fromJson(Map<String, dynamic> json) => SettingAppData(
         id: json["id"],
         logo: json["logo"].toString(),
+        orderText: json["order_text"].toString(),
         logoPosition: json["logo_position"].toString(),
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),

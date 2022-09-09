@@ -1,3 +1,7 @@
 {
-    "dart.flutterSdkPath": "C:\\src\\flutter"
+    "dart.flutterSdkPath": "C:\\src\\flutter",
+    "cSpell.words": [
+        "gallary"
+    ],
+    "java.configuration.updateBuildConfiguration": "interactive"
 }

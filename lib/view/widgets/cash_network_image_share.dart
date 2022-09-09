@@ -16,7 +16,6 @@ class CachedNetworkImageShare extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    log('urlImage $urlImage');
     return ClipRRect(
       borderRadius: BorderRadius.circular(borderNumber.r),
       child: CachedNetworkImage(
@@ -28,7 +27,7 @@ class CachedNetworkImageShare extends StatelessWidget {
             shape: borderNumber == 0 ? BoxShape.circle : BoxShape.rectangle,
             image: DecorationImage(
               image: imageProvider,
-              fit: BoxFit.fill,
+              fit: BoxFit.fitWidth,
             ),
           ),
         ),

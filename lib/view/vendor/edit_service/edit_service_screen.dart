@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/size_extension.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
-import 'package:multi_select_flutter/bottom_sheet/multi_select_bottom_sheet_field.dart';
-import 'package:multi_select_flutter/chip_display/multi_select_chip_display.dart';
-import 'package:multi_select_flutter/util/multi_select_item.dart';
-import 'package:multi_select_flutter/util/multi_select_list_type.dart';
+
 import 'package:yacht_booking/apis/home_vendor_apis.dart';
 import 'package:yacht_booking/common/app_colors.dart';
 import 'package:yacht_booking/common/assets.dart';
@@ -19,8 +15,10 @@ import 'package:yacht_booking/view/widgets/custom_button.dart';
 import 'package:yacht_booking/view/widgets/custom_text.dart';
 import 'package:yacht_booking/view/widgets/custom_text_form_field.dart';
 
+import '../../widgets/cash_network_image_share.dart';
+
 class EditServiceScreen extends StatefulWidget {
- final MyShipModelData myShipModelData;
+  final MyShipModelData myShipModelData;
 
   const EditServiceScreen({this.myShipModelData});
 
@@ -37,16 +35,15 @@ class _EditServiceScreenState extends State<EditServiceScreen> {
   List<SubServiceVendorModelData> selectedSub = [];
   List<String> selectedSubId = [];
 
-
-  String hourPrice, prePrice, totalPrice, note, noPerson,test;
+  String hourPrice, prePrice, totalPrice, note, noPerson, test;
   String selectedSubService;
   setHourPrice(String value) {
     this.hourPrice = value;
   }
+
   setTest(String value) {
     this.test = value;
   }
-
 
   setPrePrice(String value) {
     this.prePrice = value;
@@ -59,10 +56,10 @@ class _EditServiceScreenState extends State<EditServiceScreen> {
   setNote(String value) {
     this.note = value;
   }
-   setNoPerson(String value){
-      this.noPerson = value;
-  }
 
+  setNoPerson(String value) {
+    this.noPerson = value;
+  }
 
   List<String> listNoPerson = [
     "اقل من 5",
@@ -74,36 +71,32 @@ class _EditServiceScreenState extends State<EditServiceScreen> {
   void initState() {
     super.initState();
     setIniitoal();
-    
   }
 
-  setIniitoal(){
+  setIniitoal() {
     setState(() {
       noPerson = widget.myShipModelData.numberOfPersones.toString();
-      if(widget.myShipModelData.bookingWay.toString()=="cash"){
-          isCompleat2 = true;
-          isCompleat = false;
-
-      }else{
+      if (widget.myShipModelData.bookingWay.toString() == "cash") {
+        isCompleat2 = true;
+        isCompleat = false;
+      } else {
         isCompleat2 = false;
-          isCompleat = true;
-
+        isCompleat = true;
       }
-      
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Obx((){
+    return Obx(() {
       return Scaffold(
-      appBar: CustomAppBar(
-        title: 'تعديل الخدمه',
-        backFun: (){
-          Get.back();
-        },
-      ),
-      body: SizedBox(
+        appBar: CustomAppBar(
+          title: 'تعديل الخدمه',
+          backFun: () {
+            Get.back();
+          },
+        ),
+        body: SizedBox(
           width: double.infinity,
           child: SingleChildScrollView(
             padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
@@ -249,13 +242,30 @@ class _EditServiceScreenState extends State<EditServiceScreen> {
                                                   height: 1,
                                                   fontWeight: FontWeight.bold,
                                                 ),
-                                                SvgPicture.asset(
-                                                  Assets.getIconSvg('logo'),
-                                                  width: 25.r,
-                                                  height: 25.r,
-                                                  fit: BoxFit.contain,
-                                                  color: AppColors.primaryColor,
-                                                ),
+                                                homeVendorController
+                                                            .getVendorServicesData
+                                                            .value
+                                                            .data[index]
+                                                            .icon ==
+                                                        null
+                                                    ? SvgPicture.asset(
+                                                        Assets.getIconSvg(
+                                                            'logo'),
+                                                        width: 25.r,
+                                                        height: 25.r,
+                                                        fit: BoxFit.contain,
+                                                        color: AppColors
+                                                            .primaryColor,
+                                                      )
+                                                    : CachedNetworkImageShare(
+                                                        homeVendorController
+                                                            .getVendorServicesData
+                                                            .value
+                                                            .data[index]
+                                                            .icon,
+                                                        25.r,
+                                                        25.r,
+                                                        1)
                                               ],
                                             ),
                                           ),
@@ -264,17 +274,19 @@ class _EditServiceScreenState extends State<EditServiceScreen> {
                                     ),
                         ),
                         SizedBox(height: 10.h),
-                        // CustomText(
-                        //   'الرجاء تعبئة الحقول الآتية:',
-                        //   alignment: AlignmentDirectional.centerStart,
-                        //   fontWeight: FontWeight.bold,
-                        // ),
+
                         SizedBox(height: 10.h),
                         CustomTextFormField(
                           hintText: 'سعر الساعة/الدقيقة',
                           fillColor: Colors.white,
                           isBoxShadow: false,
-                          textInitialValue:widget.myShipModelData.dayPrice.toString(),
+                          textInputType: TextInputType.number,
+                          isComplate: true,
+                          onFieldSubmitted: () {
+                            FocusScope.of(context).unfocus();
+                          },
+                          textInitialValue:
+                              widget.myShipModelData.dayPrice.toString() ?? "",
                           onSaved: setHourPrice,
                           validator: Helper.validationNull,
                           suffixIcon: Padding(
@@ -295,11 +307,21 @@ class _EditServiceScreenState extends State<EditServiceScreen> {
                             ),
                           ),
                         ),
+
                         SizedBox(height: 10.h),
                         CustomTextFormField(
-                          hintText: 'عدد الاشخاص',     textInputType: TextInputType.number,
+                          hintText: 'عدد الاشخاص',
+                          textInputType: TextInputType.number,
                           fillColor: Colors.white,
                           isBoxShadow: false,
+                          isComplate: true,
+                          onFieldSubmitted: () {
+                            FocusScope.of(context).unfocus();
+                          },
+                          textInitialValue: widget
+                                  .myShipModelData.numberOfPersones
+                                  .toString() ??
+                              "",
                           onSaved: setNoPerson,
                           validator: Helper.validationNull,
                           prefixIcon: Icon(
@@ -307,7 +329,6 @@ class _EditServiceScreenState extends State<EditServiceScreen> {
                             size: 22.r,
                             color: AppColors.primaryColor,
                           ),
-                         
                         ),
                         // CustomDropDown(
                         //   value: noPerson,
@@ -326,49 +347,66 @@ class _EditServiceScreenState extends State<EditServiceScreen> {
                         //   height: 55,
                         // ),
                         SizedBox(height: 10.h),
-                        homeVendorController
-                                    .getVendorSubServicesData.value.data ==
-                                null
-                            ? Helper.loading()
-                            :
-                             Column(
-                                children: [
-                                  MultiSelectBottomSheetField(
-                                    initialChildSize: 0.4,
-                                    listType: MultiSelectListType.CHIP,
-                                    
-                                    searchable: true,
-                                    buttonText: Text(":حدد الخدمات المقدمة  "),
-                                    title: Text(":حدد الخدمات المقدمة  "),
-                                    items: homeVendorController
-                                        .getVendorSubServicesData.value.data
-                                        .map((e) => MultiSelectItem<
-                                                SubServiceVendorModelData>(
-                                            e, e.title))
-                                        .toList(),
-                                    onConfirm: (values) {
-                                      selectedSub = values;
-                                    },
-                                    chipDisplay: MultiSelectChipDisplay(
-                                      onTap: (value) {
-                                        setState(() {
-                                          selectedSub.remove(value);
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                  selectedSub == null || selectedSub.isEmpty
-                                      ? Container(
-                                          padding: EdgeInsets.all(10),
-                                          alignment: Alignment.centerLeft,
-                                          child: Text(
-                                            "None selected",
-                                            style: TextStyle(
-                                                color: Colors.black54),
-                                          ))
-                                      : Container(),
-                                ],
-                              ),
+                        // homeVendorController
+                        //             .getVendorSubServicesData.value.data ==
+                        //         null
+                        //     ? Helper.loading()
+                        //     : Column(
+                        //         children: [
+                        //           MultiSelectBottomSheetField<
+                        //               SubServiceVendorModelData>(
+                        //             initialChildSize: 0.4,
+                        //             listType: MultiSelectListType.CHIP,
+                        //             searchable: true,
+                        //             buttonText: Text(":حدد الخدمات المقدمة  "),
+                        //             title: Text(":حدد الخدمات المقدمة  "),
+                        //             cancelText: Text(
+                        //               "إلغاء",
+                        //               style: TextStyle(
+                        //                 fontSize: 14.sp,
+                        //                 color: Colors.black54,
+                        //                 fontWeight: FontWeight.bold,
+                        //               ),
+                        //             ),
+                        //             confirmText: Text("تأكيد",
+                        //                 style: TextStyle(
+                        //                   fontSize: 14.sp,
+                        //                   color: AppColors.primaryColor,
+                        //                   fontWeight: FontWeight.bold,
+                        //                 )),
+                        //             // initialValue: selectedSub,
+                        //             items: homeVendorController
+                        //                 .getVendorSubServicesData.value.data
+                        //                 .map((e) => MultiSelectItem<
+                        //                         SubServiceVendorModelData>(
+                        //                     e, e.title))
+                        //                 .toList(),
+                        //             onConfirm: (values) {
+                        //               selectedSub = values;
+                        //             },
+                        //             // initialValue: widget.myShipModelData
+                        //             //     .servicesShip[0].subServicesId,
+                        //             chipDisplay: MultiSelectChipDisplay(
+                        //               onTap: (value) {
+                        //                 setState(() {
+                        //                   selectedSub.remove(value);
+                        //                 });
+                        //               },
+                        //             ),
+                        //           ),
+                        //           selectedSub == null || selectedSub.isEmpty
+                        //               ? Container(
+                        //                   padding: EdgeInsets.all(10),
+                        //                   alignment: Alignment.centerLeft,
+                        //                   child: Text(
+                        //                     "لم يتم تحديد أي منها".tr,
+                        //                     style: TextStyle(
+                        //                         color: Colors.black54),
+                        //                   ))
+                        //               : Container(),
+                        //         ],
+                        //       ),
+
                         // CustomDropDownServiceVendor(
                         //   value:homeVendorController.getVendorSubServicesData.value.data.first?? null,
                         //   hint: "حدد الخدمات المقدمة",
@@ -388,13 +426,17 @@ class _EditServiceScreenState extends State<EditServiceScreen> {
                         SizedBox(height: 10.h),
                         InkWell(
                           onTap: () {
-                            homeVendorController.addImageOrder();
+                            homeVendorController.selectImage();
                           },
                           child: CustomTextFormField(
                             hintText: 'اضافة صور ',
                             fillColor: Colors.white,
                             isBoxShadow: false,
                             enabled: false,
+                            isComplate: true,
+                            onFieldSubmitted: () {
+                              FocusScope.of(context).unfocus();
+                            },
                             onSaved: setTest,
                             validator: Helper.validationnoo,
                             prefixIcon: Icon(
@@ -428,7 +470,7 @@ class _EditServiceScreenState extends State<EditServiceScreen> {
                           id: "imagesOrder",
                           init: HomeVendorController(),
                           builder: (controller) {
-                            return controller.resultImagePhoto.isEmpty
+                            return controller.imageList.isEmpty
                                 ? SizedBox()
                                 : Container(
                                     height: 75.h,
@@ -436,8 +478,7 @@ class _EditServiceScreenState extends State<EditServiceScreen> {
                                     child: ListView.separated(
                                       shrinkWrap: true,
                                       scrollDirection: Axis.horizontal,
-                                      itemCount:
-                                          controller.resultImagePhoto.length,
+                                      itemCount: controller.imageList.length,
                                       separatorBuilder: (context, index) =>
                                           SizedBox(width: 5.w),
                                       itemBuilder: (context, index) =>
@@ -448,17 +489,17 @@ class _EditServiceScreenState extends State<EditServiceScreen> {
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(8.r),
-                                          image: DecorationImage(
-                                            image: AssetThumbImageProvider(
-                                                controller
-                                                    .resultImagePhoto[index],
-                                                width: 100,
-                                                height: 75),
-                                            //  AssetImage(
-                                            //   Assets.getImage('bg'),
-                                            // ),
-                                            fit: BoxFit.cover,
-                                          ),
+                                          // image: DecorationImage(
+                                          //   image: AssetThumbImageProvider(
+                                          //       controller
+                                          //           .resultImagePhoto[index],
+                                          //       width: 100,
+                                          //       height: 75),
+                                          //   //  AssetImage(
+                                          //   //   Assets.getImage('bg'),
+                                          //   // ),
+                                          //   fit: BoxFit.cover,
+                                          // ),
                                         ),
                                         child: InkWell(
                                           onTap: () {
@@ -537,75 +578,64 @@ class _EditServiceScreenState extends State<EditServiceScreen> {
                             ),
                           ],
                         ),
+
                         SizedBox(height: 15.h),
-                        CustomTextFormField(
-                          hintText: 'مبلغ العربون',
-                          fillColor: Colors.white,
-                          isBoxShadow: false,     textInputType: TextInputType.number,
-                          onSaved: setPrePrice,
-                          textInitialValue: widget.myShipModelData.prepaid.toString(),
-                          validator: Helper.validationNull,
-                          prefixIcon: Icon(
-                            Icons.monetization_on,
-                            size: 22.r,
-                            color: AppColors.primaryColor,
-                          ),
-                          suffixIcon: Padding(
-                            padding: EdgeInsetsDirectional.only(end: 10.w),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Container(
-                                  height: 30.h,
-                                  child: VerticalDivider(thickness: 1),
+                        isCompleat2
+                            ? Container()
+                            : CustomTextFormField(
+                                hintText: 'مبلغ العربون',
+                                fillColor: Colors.white,
+                                isBoxShadow: false,
+                                isComplate: true,
+                                onFieldSubmitted: () {
+                                  FocusScope.of(context).unfocus();
+                                },
+                                textInputType: TextInputType.number,
+                                onSaved: setPrePrice,
+                                textInitialValue:
+                                    widget.myShipModelData.prepaid == null
+                                        ? ""
+                                        : widget.myShipModelData.prepaid
+                                            .toString(),
+                                validator: Helper.validationNull,
+                                prefixIcon: Icon(
+                                  Icons.monetization_on,
+                                  size: 22.r,
+                                  color: AppColors.primaryColor,
                                 ),
-                                CustomText(
-                                  'درهم',
-                                  fontSize: 10,
-                                  fontColor: AppColors.hintColor,
+                                suffixIcon: Padding(
+                                  padding:
+                                      EdgeInsetsDirectional.only(end: 10.w),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Container(
+                                        height: 30.h,
+                                        child: VerticalDivider(thickness: 1),
+                                      ),
+                                      CustomText(
+                                        'درهم',
+                                        fontSize: 10,
+                                        fontColor: AppColors.hintColor,
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 10.h),
-                        CustomTextFormField(
-                          hintText: 'مبلغ الحجز كاملاً',
-                          fillColor: Colors.white,
-                          isBoxShadow: false,
-                           textInitialValue: widget.myShipModelData.price.toString(),
-                          onSaved: setTotalPrice,
-                          validator: Helper.validationNull,
-                          prefixIcon: Icon(
-                            Icons.monetization_on,
-                            size: 22.r,
-                            color: AppColors.primaryColor,
-                          ),
-                          suffixIcon: Padding(
-                            padding: EdgeInsetsDirectional.only(end: 10.w),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Container(
-                                  height: 30.h,
-                                  child: VerticalDivider(thickness: 1),
-                                ),
-                                CustomText(
-                                  'درهم',
-                                  fontSize: 10,
-                                  fontColor: AppColors.hintColor,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                              ),
+
                         SizedBox(height: 10.h),
                         CustomTextFormField(
                           hintText: 'يمكنك إضافة ملاحظات إضافية في الخدمه',
                           fillColor: Colors.white,
                           isBoxShadow: false,
                           maxLines: 3,
-                           textInitialValue: widget.myShipModelData.notes.toString(),
+                          isComplate: true,
+                          onFieldSubmitted: () {
+                            FocusScope.of(context).unfocus();
+                          },
+                          textInitialValue: widget.myShipModelData.notes == null
+                              ? ""
+                              : widget.myShipModelData.notes,
                           onSaved: setNote,
                           validator: Helper.validationNull,
                         ),
@@ -616,46 +646,29 @@ class _EditServiceScreenState extends State<EditServiceScreen> {
                   SizedBox(height: 15.h),
                   CustomButton(
                       text: 'تعديل الخدمه',
-                      onTap: () {
-                        
-                          addOrderFormKey.currentState.save();
-                          if(selectedSub == null || selectedSub.isEmpty){
-                            
-                          }else{
-                            for (var i = 0; i < selectedSub.length; i++) {
-                              
-                              selectedSubId.add(selectedSub[i].id);
-                            }
-                          }
+                      onTap: () async {
+                        HomeVendorApis.homeVendorApis.updateShip(
+                            homeVendorController.imageList,
+                            selectedIndex,
+                            hourPrice,
+                            selectedSubId,
+                            isCompleat2 ? "" : prePrice,
+                            hourPrice,
+                            note,
+                            "0",
+                            noPerson,
+                            isCompleat2 ? "cash" : "prepaid",
+                            widget.myShipModelData.id.toString());
 
-                          // Get.back();
-                            HomeVendorApis.homeVendorApis.updateShip(
-                              homeVendorController.resultImagePhoto, 
-                              selectedIndex, 
-                              hourPrice, 
-                              selectedSubId,
-                              prePrice, 
-                              totalPrice, 
-                              note, 
-                              "0", 
-                              noPerson, 
-                              isCompleat2?
-                              "cash"
-                              :"prepaid",
-                              widget.myShipModelData.id.toString()
-                              );
-                          
-
-                        
-                        // Get.back();
+                        Get.back();
+                        // }
                       }),
                 ],
               ),
             ),
           ),
         ),
-    );
-    })
-    ;
+      );
+    });
   }
 }

@@ -1,10 +1,3 @@
-/// ***
-/// This class consists of the DateWidget that is used in the ListView.builder
-///
-/// Author: Vivek Kaushik <me@vivekkasuhik.com>
-/// github: https://github.com/iamvivekkaushik/
-/// ***
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -19,11 +12,11 @@ class DateWidget2 extends StatelessWidget {
   final String locale;
 
   DateWidget2({
-     this.date,
-     this.monthTextStyle,
-     this.dayTextStyle,
-     this.dateTextStyle,
-     this.selectionColor,
+    this.date,
+    this.monthTextStyle,
+    this.dayTextStyle,
+    this.dateTextStyle,
+    this.selectionColor,
     this.width,
     this.onDateSelected,
     this.locale,
@@ -47,11 +40,13 @@ class DateWidget2 extends StatelessWidget {
             children: <Widget>[
               // Text(new DateFormat("MMM", locale).format(date).toUpperCase(), // Month
               //     style: monthTextStyle),
-              Text(new DateFormat("E", locale).format(date).toUpperCase(), // WeekDay
+              Text(
+                  new DateFormat("E", locale)
+                      .format(date)
+                      .toUpperCase(), // WeekDay
                   style: dayTextStyle),
               Text(date.day.toString(), // Date
                   style: dateTextStyle),
-              
             ],
           ),
         ),

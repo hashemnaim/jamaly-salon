@@ -102,7 +102,7 @@ class HeaderVendor extends StatelessWidget {
                                         .getProfileUserData.value.data.id
                                         .toString(),
                                   );
-                                  Get.to(ChatScreenProvider());
+                                  Get.to(() => ChatScreenProvider());
                                 },
                                 child: Container(
                                   padding: EdgeInsetsDirectional.all(8.r),
@@ -132,7 +132,7 @@ class HeaderVendor extends StatelessWidget {
                                 onTap: () {
                                   HomeVendorApis.homeVendorApis
                                       .getNotifications();
-                                  Get.to(NotificationScreen());
+                                  Get.to(() => NotificationScreen());
                                 },
                                 child: Container(
                                   padding: EdgeInsetsDirectional.all(8.r),

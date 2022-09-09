@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/size_extension.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:yacht_booking/common/app_colors.dart';
@@ -346,7 +346,8 @@ class _EditYachtScreenState extends State<EditYachtScreen> {
                     SizedBox(height: 15.h),
                     CustomTextFormField(
                       hintText: 'مبلغ العربون',
-                      fillColor: Colors.white,     textInputType: TextInputType.number,
+                      fillColor: Colors.white,
+                      textInputType: TextInputType.number,
                       isBoxShadow: false,
                       prefixIcon: Icon(
                         Icons.monetization_on,

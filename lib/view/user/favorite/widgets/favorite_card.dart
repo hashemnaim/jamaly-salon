@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -10,18 +12,25 @@ import 'package:yacht_booking/view/widgets/cash_network_image_share.dart';
 import 'package:yacht_booking/view/widgets/icon_row.dart';
 import 'package:yacht_booking/view/widgets/svg_row.dart';
 
+import '../../reservation_confirmation/reservation_confirmation_screen.dart';
+
 class FavoriteCard extends StatelessWidget {
   final FavoriteModelData favoriteModelData;
 
   const FavoriteCard({this.favoriteModelData});
-  
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        HomeUserApis.homeUserApis.getOwnerDetails(
-                                    favoriteModelData.id.toString());
-        Get.to(CompanyDetailsScreen());
+      onTap: () async {
+        HomeUserApis.homeUserApis
+            .getShipDetails(favoriteModelData.shipId.toString());
+        Get.to(() => ReservationConfirmationScreen(true));
+        // // log(favoriteModelData.vendorId);
+        // await HomeUserApis.homeUserApis
+        //     .getOwnerDetails(favoriteModelData.vendorId.toString());
+        // Get.to(() => CompanyDetailsScreen());
+        // // Get.to(() => ReservationConfirmationScreen(true));
       },
       borderRadius: BorderRadius.circular(12.r),
       child: Container(
@@ -45,11 +54,11 @@ class FavoriteCard extends StatelessWidget {
                 //   fit: BoxFit.cover,
                 // ),
               ),
-              child:favoriteModelData.ships==null|| favoriteModelData.ships.image==null
-              ?SizedBox():
-              CachedNetworkImageShare(
-                favoriteModelData.ships.image, 
-                110.h, 85.w, 15),
+              child: favoriteModelData.ships == null ||
+                      favoriteModelData.ships.image == null
+                  ? SizedBox()
+                  : CachedNetworkImageShare(
+                      favoriteModelData.ships.image, 110.h, 85.w, 15),
             ),
             SizedBox(width: 5.w),
             Expanded(
@@ -62,42 +71,43 @@ class FavoriteCard extends StatelessWidget {
                     children: [
                       IconRow(
                         Icons.person,
-                        favoriteModelData.ships==null
-                        ?"":
-                        '${favoriteModelData.ships.title??""}',
+                        favoriteModelData.ships == null
+                            ? ""
+                            : '${favoriteModelData.ships.title ?? ""}',
                       ),
                       IconRow(
                         Icons.star,
-                        favoriteModelData.ships==null
-                        ?"0":
-                        '${favoriteModelData.ships.rate??"0"}',
+                        favoriteModelData.ships == null
+                            ? "0"
+                            : '${favoriteModelData.ships.rate ?? "0"}',
                         iconColor: AppColors.yellow,
                         fontWeight: FontWeight.bold,
                       ),
                     ],
                   ),
                   IconRow(
-                    Icons.location_on, 
-                    favoriteModelData.ships==null
-                    ?"":
-                    '${favoriteModelData.ships.country??""}',),
+                    Icons.location_on,
+                    favoriteModelData.ships == null
+                        ? ""
+                        : '${favoriteModelData.ships.country ?? ""}',
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       SvgRow(
                         'dolar',
-                        favoriteModelData.ships==null
-                        ?"":
-                        '\$${favoriteModelData.ships.price??""}',
+                        favoriteModelData.ships == null
+                            ? ""
+                            : '\$${favoriteModelData.ships.price ?? ""}',
                         svgColor: AppColors.primaryColor,
                         fontWeight: FontWeight.bold,
                       ),
                       SizedBox(width: 15.w),
                       SvgRow(
                         'date',
-                        favoriteModelData.ships==null
-                        ?"":
-                        '${favoriteModelData.ships.createdAt.toString().split("T").first??""}',
+                        favoriteModelData.ships == null
+                            ? ""
+                            : '${favoriteModelData.ships.createdAt.toString().split("T").first ?? ""}',
                         svgColor: AppColors.primaryColor,
                       ),
                     ],

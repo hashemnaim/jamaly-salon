@@ -8,12 +8,15 @@ import 'package:yacht_booking/models/offers_model.dart';
 import 'package:yacht_booking/models/order_details_model.dart';
 import 'package:yacht_booking/models/owners_model.dart';
 import 'package:yacht_booking/models/profile_model.dart';
+
 import 'package:yacht_booking/models/services_model.dart';
 import 'package:yacht_booking/models/ships_details.dart';
 import 'package:yacht_booking/models/terms_model.dart';
 import 'package:yacht_booking/models/top_rat_offer_model.dart';
 import 'package:yacht_booking/models/top_rate+ship_model.dart';
 import 'package:yacht_booking/models/vendor_service.dart';
+
+import '../../models/search_ship_model.dart';
 
 class HomeUserController extends GetxController {
   Rx<ProfileModel> getProfileUserData = ProfileModel().obs;
@@ -27,6 +30,7 @@ class HomeUserController extends GetxController {
   Rx<VendorsService> getVendorsByCategoryIdServiceData = VendorsService().obs;
 
   Rx<ShipsDetailsModel> shipsDetaileData = ShipsDetailsModel().obs;
+  Rx<SearchShipsModel> searchShipsModel = SearchShipsModel().obs;
 
   Rx<AdvertismentModel> getAdvertismentsData = AdvertismentModel().obs;
   Rx<ServicesModel> getServicesData = ServicesModel().obs;
@@ -47,55 +51,4 @@ class HomeUserController extends GetxController {
       categoryIdList.add(id);
     }
   }
-  //  Set<Marker> myMarker = {};
-
-  //      getMarkerrr2() async {
-  //   myMarker.clear();
-  //   BitmapDescriptor bitmapDescriptorCar =
-  //       await BitmapDescriptor.fromAssetImage(
-  //           ImageConfiguration.empty, "assets/images/ship_1.png");
-
-  //   for (var i = 0; i < getCarMapData.value.data.length; i++) {
-  //     myMarker.add(
-  //       Marker(
-  //         markerId: MarkerId(
-  //             "marker ${getCarMapData.value.data[i].id.toString()}"),
-  //         position: LatLng(
-  //             getCarMapData.value.data[i].locationLat== null
-  //                 ? 24.2669
-  //                 : double.parse(getCarMapData.value.data[i].locationLat
-  //                     .toString()),
-  //             getCarMapData.value.data[i].locationLong ==
-  //                     null
-  //                 ? 45.1078
-  //                 : double.parse(getCarMapData.value.data[i].locationLong
-  //                     .toString())),
-  //         icon: bitmapDescriptorCar,
-
-  //         onTap: () {
-  //           return showMaterialModalBottomSheet(
-  //             backgroundColor: Colors.transparent,
-  //             context: Get.context,
-  //             duration: Duration(milliseconds: 600),
-  //             shape: RoundedRectangleBorder(
-  //               borderRadius: borderRadiusShowDialog,
-  //             ),
-  //             builder: (context) {
-  //               return SizedBox(
-  //                   width: double.infinity,
-  //                   height: 350,
-  //                   child: Container(
-  //                     child: CardCarMap(
-  //                       carData: getCarMapData.value.data[i],
-  //                     ),
-  //                   ));
-  //             },
-  //           );
-  //         }));
-  //     update(['map']);
-  //   }
-
-  //   update(['map']);
-  // }
-
 }

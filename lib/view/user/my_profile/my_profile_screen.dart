@@ -63,12 +63,6 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // CustomText(
-                //   'الشخصي',
-                //   alignment: AlignmentDirectional.centerEnd,
-                //   fontColor: AppColors.primaryColor,
-                //   fontWeight: FontWeight.w600,
-                // ),
                 SizedBox(
                   height: 10.h,
                 ),
@@ -96,7 +90,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                       onTap: () {
                         if (index == 0) {
                           HomeUserApis.homeUserApis.getBookings();
-                          Get.to(MeReservationScreen());
+                          Get.to(() => MeReservationScreen());
                         } else if (index == 1) {
                           FireBaseHelperProvider.fireBaseHelperProvider
                               .getAllMyChats(
@@ -104,19 +98,19 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                 .getProfileUserData.value.data.id
                                 .toString(),
                           );
-                          Get.to(ChatScreenProvider());
+                          Get.to(() => ChatScreenProvider());
                         } else if (index == 2) {
                           HomeUserApis.homeUserApis.getFavoriteShip();
                           HomeUserApis.homeUserApis.getFavoriteVendor();
                           widget._bottomNavBarController.changeSelectedIndex(2);
                         } else if (index == 3) {
                           OrderUserApi.orderUserApi.orderOffers();
-                          Get.to(BudgetRequestScreen());
+                          Get.to(() => BudgetRequestScreen());
                         } else if (index == 4) {
                           HomeUserApis.homeUserApis.getTerms();
-                          Get.to(TermsAndConditionsScreen());
+                          Get.to(() => TermsAndConditionsScreen());
                         } else if (index == 5) {
-                          Get.to(CommunicationScreen());
+                          Get.to(() => CommunicationScreen());
                         } else {
                           return null;
                         }
@@ -153,7 +147,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                     fit: BoxFit.cover,
                   ),
                   onTap: () {
-                    Get.offAll(WelcomeScreen());
+                    Get.offAll(() => WelcomeScreen());
                     AuthApis.authApis.logOutUser();
                     SPHelper.spHelper.setToken('');
 

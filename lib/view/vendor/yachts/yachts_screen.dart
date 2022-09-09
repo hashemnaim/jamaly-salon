@@ -189,7 +189,7 @@ class YachtsScreen extends StatelessWidget {
                   text: 'اضافه خدمه جديده',
                   width: 220,
                   onTap: () {
-                    Get.to(AddNewServiceScreen());
+                    Get.to(() => AddNewServiceScreen());
                   },
                   icon: Icon(
                     Icons.add_circle,

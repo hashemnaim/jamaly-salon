@@ -1,4 +1,7 @@
-import 'package:country_code_picker/country_code_picker.dart';
+import 'dart:io';
+
+import 'package:country_pickers/country.dart';
+import 'package:country_pickers/country_pickers.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,7 +14,6 @@ import 'package:yacht_booking/common/constant.dart';
 import 'package:yacht_booking/common/helper.dart';
 import 'package:yacht_booking/controller/vendor/main_vendor_controller.dart';
 import 'package:yacht_booking/view/user/terms_and_conditions/terms_and_conditions.dart';
-import 'package:yacht_booking/view/vendor/choose_category_screen.dart';
 import 'package:yacht_booking/view/widgets/custom_app_bar.dart';
 import 'package:yacht_booking/view/widgets/custom_button.dart';
 import 'package:yacht_booking/view/widgets/custom_drop.dart';
@@ -33,9 +35,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool isTerm = false;
   int city = citys[0]['id'];
   String cityName;
-
+  FocusNode focusNode1 = FocusNode();
+  FocusNode focusNode2 = FocusNode();
+  FocusNode focusNode3 = FocusNode();
+  FocusNode focusNode4 = FocusNode();
+  FocusNode focusNode5 = FocusNode();
   setName(String value) {
     this.name = value;
+    // focusNode1.nextFocus();
   }
 
   setPassword(String value) {
@@ -52,6 +59,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   setEmail(String value) {
     this.email = value;
+    // focusNode2.nextFocus();
   }
 
   setDialCode(String value) {
@@ -61,11 +69,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SizedBox(
         height: Get.height,
         width: Get.width,
         child: Column(
-          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
               child: Stack(
@@ -109,12 +117,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
                   PositionedDirectional(
-                    top: 220.h,
+                    top: 230.h,
+                    bottom:
+                        WidgetsBinding.instance.window.viewInsets.bottom > 0.0
+                            ? MediaQuery.of(context).viewInsets.bottom - 70.h
+                            : 20,
                     start: 15.w,
                     end: 15.w,
                     child: Container(
                       width: double.infinity,
-                      height: _mainVendorController.vendor ? 550.h : 520.h,
+                      height: _mainVendorController.vendor ? 500.h : 520.h,
                       padding: EdgeInsetsDirectional.all(15.r),
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -125,8 +137,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         key: registerFormKey,
                         child: SingleChildScrollView(
                           child: Column(
-                            // mainAxisAlignment: MainAxisAlignment.start,
-                            // crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               CustomText(
                                 'حساب جديد',
@@ -152,7 +162,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 fontWeight: FontWeight.bold,
                                 fontColor: AppColors.primaryColor,
                               ),
-                              SizedBox(height: 40.h),
+                              SizedBox(height: 20.h),
                               CustomTextFormField(
                                 hintText: 'أسم المستخدم',
                                 prefixIcon: Icon(
@@ -161,8 +171,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   color: AppColors.hintColor,
                                 ),
                                 isBoxShadow: false,
+                                isComplate: true,
                                 fillColor: Colors.white,
                                 onSaved: setName,
+                                textInputAction: TextInputAction.next,
+                                onFieldSubmitted: () {
+                                  FocusScope.of(context)
+                                      .requestFocus(focusNode2);
+                                  setState(() {});
+                                },
+                                focusNode: focusNode1,
+                                textInputType: TextInputType.name,
                                 validator: Helper.validationNull,
                               ),
                               SizedBox(height: 15.h),
@@ -174,8 +193,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   color: AppColors.hintColor,
                                 ),
                                 isBoxShadow: false,
+                                isComplate: true,
                                 fillColor: Colors.white,
                                 onSaved: setEmail,
+                                textInputAction: TextInputAction.next,
+                                focusNode: focusNode2,
+                                onFieldSubmitted: () {
+                                  FocusScope.of(context)
+                                      .requestFocus(focusNode3);
+                                  setState(() {});
+                                },
+                                textInputType: TextInputType.emailAddress,
                                 validator: Helper.validationEmail,
                               ),
                               SizedBox(height: 15.h),
@@ -187,9 +215,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   color: AppColors.hintColor,
                                 ),
                                 isBoxShadow: false,
+                                isComplate: true,
                                 fillColor: Colors.white,
                                 obscureText: true,
+                                textInputAction: TextInputAction.next,
+                                focusNode: focusNode3,
+                                onFieldSubmitted: () {
+                                  FocusScope.of(context)
+                                      .requestFocus(focusNode4);
+                                  setState(() {});
+                                },
                                 onSaved: setPassword,
+                                textInputType: TextInputType.visiblePassword,
                                 validator: Helper.validationString,
                               ),
                               SizedBox(height: 15.h),
@@ -201,15 +238,35 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   color: AppColors.hintColor,
                                 ),
                                 isBoxShadow: false,
+                                isComplate: true,
                                 fillColor: Colors.white,
                                 obscureText: true,
+                                focusNode: focusNode4,
+                                textInputAction: TextInputAction.next,
+                                onFieldSubmitted: () {
+                                  FocusScope.of(context)
+                                      .requestFocus(focusNode5);
+                                  setState(() {});
+                                },
+                                textInputType: TextInputType.visiblePassword,
                                 onSaved: setConfirmPassword,
-                                validator: Helper.validationString,
+                                validator: (value) {
+                                  if (password == null || password == '') {
+                                    return 'الحقل مطلوب'.tr;
+                                  } else if (password.length < 8) {
+                                    return 'يجب ان يكون اكبر من 8 احرف'.tr;
+                                  } else if (password != confirmPassword) {
+                                    return 'تأكيد المرور غير صحيح'.tr;
+                                  }
+                                },
                               ),
                               SizedBox(height: 15.h),
                               CustomTextFormField(
                                 hintText: 'رقم الهاتف',
                                 onSaved: setMobile,
+                                textInputType: Platform.isAndroid == false
+                                    ? TextInputType.text
+                                    : TextInputType.number,
                                 validator: Helper.validationNull,
                                 prefixIcon: Icon(
                                   Icons.call,
@@ -217,23 +274,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   color: AppColors.hintColor,
                                 ),
                                 isBoxShadow: false,
+                                isComplate: true,
                                 fillColor: Colors.white,
-                                textInputType: TextInputType.phone,
+                                textInputAction: TextInputAction.done,
+                                focusNode: focusNode5,
+                                onFieldSubmitted: () {
+                                  FocusScope.of(context).unfocus();
+                                },
                                 suffixIcon: Directionality(
                                   textDirection: TextDirection.ltr,
-                                  child: CountryCodePicker(
-                                    onChanged: print,
-                                    initialSelection: 'AE',
-                                    favorite: ['+971', 'AE'],
-                                    showCountryOnly: false,
-                                    showOnlyCountryWhenClosed: false,
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 5.r, horizontal: 5.r),
-                                    flagWidth: 25.w,
-                                    textStyle: TextStyle(
-                                      fontSize: 13.sp,
-                                      color: AppColors.fontSecondaryColor,
-                                    ),
+                                  child: CountryPickerDropdown(
+                                    initialValue: 'AE',
+                                    onValuePicked: (Country value) {},
                                   ),
                                 ),
                               ),
@@ -294,7 +346,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 ],
                               ),
                               SizedBox(
-                                height: 20.h,
+                                height: 65.h,
                               ),
                             ],
                           ),
@@ -307,44 +359,47 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
             Padding(
               padding: EdgeInsetsDirectional.only(
-                  start: 15.w, end: 15.w, bottom: 15.h),
+                  start: 15.w, end: 15.w, bottom: 10.h),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   CustomButton(
                     text: 'إنشاء الحساب',
-                    onTap: () {
+                    onTap: () async {
                       if (registerFormKey.currentState.validate()) {
                         registerFormKey.currentState.save();
-                        if (_mainVendorController.vendor) {
-                          HomeUserApis.homeUserApis.getCategories();
-
-                          Get.to(
-                            () => ChooseCategoryScreen(
-                              name: name,
-                              address: cityName,
-                              confirmPassword: confirmPassword,
-                              email: email,
-                              mobile: mobile,
-                              password: password,
-                              type: 'vendor',
-                            ),
-                          );
+                        if (isTerm == false) {
+                          Helper.getSheetError(
+                              "يجب الموافقة على الشروط والاحكام");
                         } else {
-                          AuthApis.authApis.registerUser(
-                            name,
-                            email,
-                            password,
-                            confirmPassword,
-                            'user',
-                            mobile,
-                            null,
-                            [].toString(),
-                          );
+                          if (_mainVendorController.vendor) {
+                            HomeUserApis.homeUserApis.getCategories();
+
+                            await AuthApis.authApis.registerUser(
+                              name,
+                              email,
+                              password,
+                              confirmPassword,
+                              'vendor',
+                              mobile,
+                              cityName,
+                              [].toString(),
+                            );
+                          } else {
+                            AuthApis.authApis.registerUser(
+                              name,
+                              email,
+                              password,
+                              confirmPassword,
+                              'user',
+                              mobile,
+                              null,
+                              [].toString(),
+                            );
+                          }
                         }
                       }
-                      // Get.offAll(() => BottomNavBarScreen());
                     },
                   ),
                   SizedBox(height: 4.h),
@@ -362,7 +417,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         text: 'دخول',
                         style: TextStyle(
                           color: AppColors.primaryColor,
-                          fontSize: 14.sp,
+                          fontSize: 16.sp,
                           fontFamily: 'Cairo',
                           fontWeight: FontWeight.bold,
                         ),

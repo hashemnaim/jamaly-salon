@@ -12,6 +12,9 @@ import 'package:yacht_booking/view/widgets/custom_text.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../apis/auth_apis.dart';
+import '../user/change_password_success/change_password_success_screen.dart';
+
 class ChooseCategoryScreen extends StatelessWidget {
   final String name;
   final String email;
@@ -139,16 +142,20 @@ class ChooseCategoryScreen extends StatelessWidget {
                 text: 'تأكيد',
                 onTap: () {
                   if (homeUserController.categoryIdList.length != 0) {
-                    AuthApis.authApis.registerUser(
-                      name,
-                      email,
-                      password,
-                      confirmPassword,
-                      type,
-                      mobile,
-                      address,
-                      homeUserController.categoryIdList.toString(),
-                    );
+                    AuthApis.authApis.setVendorCategories(
+                        homeUserController.categoryIdList.toString());
+                    Get.offAll(() => ChangePasswordSuccessScreen());
+
+                    // AuthApis.authApis.registerUser(
+                    //   name,
+                    //   email,
+                    //   password,
+                    //   confirmPassword,
+                    //   type,
+                    //   mobile,
+                    //   address,
+                    //   homeUserController.categoryIdList.toString(),
+                    // );
                   } else {
                     Helper.getSheetError('الرجاء اختيار التصنيفات التي تقدمها');
                   }

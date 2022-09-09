@@ -17,8 +17,10 @@ import 'package:yacht_booking/services/progress_dialog_utils.dart';
 import 'package:yacht_booking/services/sp_helper.dart';
 import 'package:yacht_booking/view/user/auth/confirmation_code_screen.dart';
 import 'package:yacht_booking/view/user/bottom_nav_bar/bottom_nav_bar_screen.dart';
-import 'package:yacht_booking/view/user/change_password_success/change_password_success_screen.dart';
 import 'package:yacht_booking/view/vendor/main_vendor/main_vendor_screen.dart';
+
+import '../view/user/change_password_success/change_password_success_screen.dart';
+import '../view/vendor/choose_category_screen.dart';
 
 class AuthApis {
   AuthApis._();
@@ -104,10 +106,12 @@ class AuthApis {
       ProgressDialogUtils.hide();
 
       if (response.data['code'].toString() == '200') {
-        myGet.Get.to(ConfirmationCodeScreen(
-          code: response.data['data']['verify_mobile_code'].toString(),
-          mobile: mobile,
-        ));
+        myGet.Get.to(() => ConfirmationCodeScreen(
+              code: response.data['data']['verify_mobile_code'].toString(),
+              mobile: response.data['data']['mobile'],
+              type: response.data['data']['type'],
+            ));
+        Helper.getSheetSucsses("تم تسجيل الدخول بنجاح");
       } else if (response.data['code'].toString() == '422') {
         Map map = jsonDecode(response.toString());
         Map map2 = map['errors'] as Map;
@@ -182,26 +186,6 @@ class AuthApis {
           );
         }
 
-        // if (response.data['user']['type'] == 'user') {
-        //   print('uuuuuuuuuuuuuuuuuuuuuuuuuu ${response.data['user']['type']}');
-        //   //  homeUserController.setSelectedIndex(1);
-        //   // Helper.getRequiredDataWithToken();
-        //   // myGet.Get.offAll(
-        //   //   () => MainPageUser(),
-        //   //   transition: myGet.Transition.rightToLeft,
-        //   //   duration: Duration(milliseconds: 700),
-        //   // );
-        // } else if(response.data['user']['type'] =='vendor'){
-        //   print('vvvvvvvvvvvvvvvvvvvvvvv ${response.data['user']['type']}');
-        //   // homeVendorController.setSelectedIndexVendor(1);
-        //   // Helper.getRequiredDataWithToken();
-        //   // myGet.Get.offAll(
-        //   //   () => MainPageVendor(),
-        //   //   transition: myGet.Transition.rightToLeft,
-        //   //   duration: Duration(milliseconds: 700),
-        //   // );
-        // }
-
         Helper.getSheetSucsses('${response.data['message']}');
       } else if (response.data['code'].toString() == '422') {
         Map map = jsonDecode(response.toString());
@@ -228,20 +212,22 @@ class AuthApis {
     String mobile,
   ) async {
     try {
-      ProgressDialogUtils.show();
       initDio();
+
+      ProgressDialogUtils.show();
       String token = await SPHelper.spHelper.getToken();
       FormData data = FormData.fromMap({
         'name': name,
         "email": email,
         "mobile": mobile,
       });
+      log(email);
+
       Response response = await dio.post(
         baseUrl + updateProfileEndPoint,
         data: data,
         options: Options(
           headers: {
-            'Accept': '*/*',
             'Authorization': 'Bearer $token',
           },
           validateStatus: (status) {
@@ -249,10 +235,9 @@ class AuthApis {
           },
         ),
       );
-
       if (response.data['code'].toString() == '200') {
         // authController.clearImageProfile();
-        // HomeUserApis.homeUserApis.getProfile();
+        HomeUserApis.homeUserApis.getProfile();
         ProgressDialogUtils.hide();
         Helper.getSheetSucsses('${response.data['message']}');
       } else if (response.data['code'].toString() == '422') {
@@ -274,19 +259,22 @@ class AuthApis {
       } else if (response.data['code'].toString() == '401') {
         Helper.getSheetError('${response.data['message']}');
       }
-    } on Exception catch (e) {}
+    } on Exception catch (e) {
+      Helper.getSheetError('sdsd');
+      ProgressDialogUtils.hide();
+    }
   }
 
   //====================================================
-  setImageProfileUser(File image) async {
+  setImageProfileUser(image) async {
     try {
       ProgressDialogUtils.show();
       initDio();
       String token = await SPHelper.spHelper.getToken();
       FormData data = FormData.fromMap({
         'photo': await MultipartFile.fromFile(
-          image.path,
-          filename: basename(image.path),
+          image,
+          filename: basename(image),
         ),
       });
       Response response = await dio.post(
@@ -391,11 +379,46 @@ class AuthApis {
     }
   }
 
+//====================================================
+  setVendorCategories(String categoryId) async {
+    try {
+      // ProgressDialogUtils.show();
+      initDio();
+      String token = await SPHelper.spHelper.getToken();
+      FormData data = FormData.fromMap({'category_id': categoryId});
+      Response response = await dio.post(
+        baseUrl + "/set_vendor_categories",
+        data: data,
+        options: Options(
+          headers: {
+            'Accept': '*/*',
+            'Authorization': 'Bearer $token',
+          },
+          validateStatus: (status) {
+            return status < 500;
+          },
+        ),
+      );
+
+      if (response.data['code'].toString() == '200') {
+        ProgressDialogUtils.hide();
+      } else {
+        ProgressDialogUtils.hide();
+        Helper.getSheetError(response.data['message']);
+      }
+    } catch (e) {
+      ProgressDialogUtils.hide();
+    }
+  }
+
   //====================================================
-  verifyMobile(String mobile, String verifyMobileCode) async {
+  verifyMobile(
+    String mobile,
+    String verifyMobileCode,
+  ) async {
     try {
       ProgressDialogUtils.show();
-
+      print(mobile);
       initDio();
       String token = await SPHelper.spHelper.getToken();
       FormData data = FormData.fromMap(
@@ -405,9 +428,9 @@ class AuthApis {
         data: data,
         options: Options(
           headers: {'Accept': 'application/json'},
-          validateStatus: (status) {
-            return status < 500;
-          },
+          // validateStatus: (status) {
+          //   return status < 500;
+          // },
         ),
       );
 
@@ -416,12 +439,16 @@ class AuthApis {
         SPHelper.spHelper.setToken(response.data['accessToken']);
         SPHelper.spHelper.setUser(response.data['user']['type'].toString());
         Helper.getMainDataWithToken();
-        myGet.Get.offAll(ChangePasswordSuccessScreen());
+        print(response.data['user']['type']);
+        response.data['user']['type'] == "user"
+            ? myGet.Get.offAll(() => ChangePasswordSuccessScreen())
+            : myGet.Get.off(() => ChooseCategoryScreen());
       } else {
         ProgressDialogUtils.hide();
         Helper.getSheetError(response.data['message']);
       }
     } catch (e) {
+      print(e);
       ProgressDialogUtils.hide();
     }
   }

@@ -5,19 +5,19 @@ import 'package:yacht_booking/common/app_colors.dart';
 import 'custom_text.dart';
 
 class CustomDropDown extends StatelessWidget {
-  final value;
+  final String value;
   final List<String> itemsList;
   final Color dropdownColor;
   final String hint;
   final Function(dynamic value) onChanged;
   final double height;
   final double fontSize;
-  final Color backgroundColor, fontColor,borderColor,iconColor;
+  final Color backgroundColor, fontColor, borderColor, iconColor;
 
   const CustomDropDown({
     @required this.value,
     @required this.itemsList,
-    this.hint ,
+    this.hint,
     this.dropdownColor,
     @required this.onChanged,
     this.height = 40,
@@ -37,8 +37,7 @@ class CustomDropDown extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.r),
           color: backgroundColor,
-          border: Border.all(color: borderColor
-          ),
+          border: Border.all(color: borderColor),
           // boxShadow: AppColors.boxShadow,
         ),
         child: DropdownButtonHideUnderline(
@@ -50,13 +49,11 @@ class CustomDropDown extends StatelessWidget {
               hint: Container(
                 child: CustomText(
                   hint,
-                  fontColor: Colors.grey[400],
+                  fontColor: Colors.grey[800],
                   fontWeight: FontWeight.bold,
                   alignment: AlignmentDirectional.centerStart,
-                  
                 ),
               ),
-              
               icon: Icon(
                 Icons.keyboard_arrow_down,
                 color: iconColor,
@@ -64,8 +61,6 @@ class CustomDropDown extends StatelessWidget {
               ),
               dropdownColor: dropdownColor,
               value: value,
-
-      
               items: itemsList
                   .map(
                     (String item) => DropdownMenuItem<String>(
@@ -75,12 +70,7 @@ class CustomDropDown extends StatelessWidget {
                         fontColor: fontColor,
                         alignment: AlignmentDirectional.centerStart,
                         fontSize: fontSize,
-                        fontWeight: FontWeight.bold
-                        
-                        
-                        
-                        
-                        ,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   )

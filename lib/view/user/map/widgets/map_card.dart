@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
-import 'package:smooth_star_rating/smooth_star_rating.dart';
 import 'package:yacht_booking/apis/home_apis.dart';
 import 'package:yacht_booking/common/app_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -21,7 +21,7 @@ class MapCard extends StatelessWidget {
       onTap: () {
         HomeUserApis.homeUserApis
             .getOwnerDetails(ownersModelData.id.toString());
-        Get.to(CompanyDetailsScreen());
+        Get.to(() => CompanyDetailsScreen());
       },
       borderRadius: BorderRadius.circular(15.r),
       child: Stack(
@@ -115,18 +115,25 @@ class MapCard extends StatelessWidget {
                         ],
                       ),
                       SizedBox(height: 5.w),
-                      SmoothStarRating(
-                          allowHalfRating: false,
-                          onRated: (v) {},
-                          starCount: 5,
-                          rating: ownersModelData.rate == null
-                              ? 0
-                              : double.parse(ownersModelData.rate.toString()),
-                          size: 16.r,
-                          isReadOnly: true,
-                          color: AppColors.yellow,
-                          borderColor: AppColors.yellow,
-                          spacing: 0.0),
+                      RatingBar.builder(
+                        initialRating: ownersModelData.rate == null
+                            ? 0
+                            : double.parse(ownersModelData.rate.toString()),
+                        direction: Axis.horizontal,
+                        tapOnlyMode: true,
+                        ignoreGestures: true,
+                        allowHalfRating: true,
+                        itemCount: 5,
+                        itemSize: 16,
+                        itemPadding:
+                            const EdgeInsets.symmetric(horizontal: 1.0),
+                        itemBuilder: (context, _) => const Icon(
+                          Icons.star,
+                          color: Colors.amber,
+                          size: 1,
+                        ),
+                        onRatingUpdate: (rating) => null,
+                      ),
                     ],
                   ),
                 ),
@@ -140,7 +147,7 @@ class MapCard extends StatelessWidget {
               onTap: () {
                 HomeUserApis.homeUserApis
                     .getOwnerDetails(ownersModelData.id.toString());
-                Get.to(CompanyDetailsScreen());
+                Get.to(() => CompanyDetailsScreen());
               },
               child: Container(
                 width: 90.w,

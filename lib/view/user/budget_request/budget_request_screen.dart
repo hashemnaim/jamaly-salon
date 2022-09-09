@@ -16,7 +16,7 @@ class BudgetRequestScreen extends StatelessWidget {
     return Obx(() {
       return Scaffold(
         appBar: CustomAppBar(
-          title: 'حجزك حسب ميزانيتك',
+          title: 'طلبك حسب ميزانيتك',
           backFun: () {
             Get.back();
           },

@@ -43,7 +43,7 @@ class ChatTap extends StatelessWidget {
                             .getAllChatMessages(
                           chatGetProvider.getProfileUserData.value.data.id
                               .toString(),
-                          myChat[index]['usersInfo']['id'],
+                          myChat[index]['usersInfo']['id'].toString() ?? "",
                         ),
                         builder: (context, snapshot) {
                           if (snapshot.connectionState ==
@@ -64,11 +64,12 @@ class ChatTap extends StatelessWidget {
                                   chatGetProvider
                                       .getProfileUserData.value.data.id
                                       .toString(),
-                                  myChat[index]['usersInfo']['id'],
+                                  myChat[index]['usersInfo']['id'].toString(),
                                 );
                                 Get.to(
                                   () => ChatDetailsScreenProvider(
-                                    otherId: myChat[index]['usersInfo']['id'],
+                                    otherId: myChat[index]['usersInfo']['id']
+                                        .toString(),
                                     myId: chatGetProvider
                                         .getProfileUserData.value.data.id
                                         .toString(),

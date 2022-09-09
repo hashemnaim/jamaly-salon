@@ -49,7 +49,7 @@ class _HeaderProfileWidgetState extends State<HeaderProfileWidget> {
                         alignment: AlignmentDirectional.centerEnd,
                         child: InkWell(
                           onTap: () {
-                            Get.to(EditProfileScreen());
+                            Get.to(() => EditProfileScreen());
                           },
                           child: SvgPicture.asset(
                             Assets.getIconSvg('edit'),
@@ -110,12 +110,6 @@ class _HeaderProfileWidgetState extends State<HeaderProfileWidget> {
                             fontSize: 9,
                           ),
                           SizedBox(width: 5.w),
-                          // SvgPicture.asset(
-                          //   Assets.getIconSvg('flag'),
-                          //   fit: BoxFit.cover,
-                          //   width: 18.w,
-                          //   height: 12.h,
-                          // ),
                         ],
                       )
                     ],

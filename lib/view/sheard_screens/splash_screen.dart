@@ -27,10 +27,10 @@ class _SplashScreenState extends State<SplashScreen> {
     ProgressDialogUtils.hide();
 
     Future.delayed(
-      Duration(seconds: 7),
+      Duration(seconds: 1),
       () async {
         String token = await SPHelper.spHelper.getToken();
-        String type =   SPHelper.spHelper.getUser();
+        String type = SPHelper.spHelper.getUser();
 
         if (token == null || token == '') {
           Helper.getMainDataWithOutToken();
@@ -41,7 +41,7 @@ class _SplashScreenState extends State<SplashScreen> {
             Helper.getMainDataWithToken();
             Get.off(() => BottomNavBarScreen());
           } else {
-            Helper.getMainVendorDataWithToken();
+            await Helper.getMainVendorDataWithToken();
 
             Get.off(() => MainVendor());
           }

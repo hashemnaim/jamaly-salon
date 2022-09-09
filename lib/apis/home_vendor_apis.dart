@@ -1,12 +1,12 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart' as myGet;
 import 'package:http_parser/http_parser.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:yacht_booking/common/constant.dart';
@@ -251,7 +251,7 @@ class HomeVendorApis {
   }
 
   //===========================================
-  storeImagesGallery(List<Asset> images, String shipId) async {
+  storeImagesGallery(List<XFile> images, String shipId) async {
     try {
       ProgressDialogUtils.show();
       initDio();
@@ -265,13 +265,13 @@ class HomeVendorApis {
       }
 
       for (int i = 0; i < images.length; i++) {
-        ByteData byteData = await images[i].getByteData();
+        // ByteData byteData = await images[i].path;
 
         final dir = await path_provider.getTemporaryDirectory();
         File filess = createFile("${dir.absolute.path}/test.png");
-        filess.writeAsBytesSync(byteData.buffer.asUint8List());
+        filess.writeAsBytesSync(utf8.encode(images[i].path));
         final result = await FlutterImageCompress.compressWithList(
-          byteData.buffer.asUint8List(),
+          utf8.encode(images[i].path),
           minHeight: 720,
           minWidth: 720,
           quality: 60,
@@ -552,7 +552,7 @@ class HomeVendorApis {
             'Authorization': 'Bearer $token',
           },
           validateStatus: (status) {
-            return status < 600;
+            return status < 500;
           },
         ),
       );
@@ -597,7 +597,7 @@ class HomeVendorApis {
 
   //===========================================
   addShip(
-    List<Asset> images,
+    List<XFile> images,
     String serviceId,
     String dayPrice,
     List subServicesId,
@@ -608,7 +608,7 @@ class HomeVendorApis {
     String numberOfPersones,
     String bookingway,
     String title,
-    String priceFor,
+    double priceFor,
   ) async {
     try {
       ProgressDialogUtils.show();
@@ -623,13 +623,13 @@ class HomeVendorApis {
       }
 
       for (int i = 0; i < images.length; i++) {
-        ByteData byteData = await images[i].getByteData();
+        // ByteData byteData = await images[i].getByteData();
 
         final dir = await path_provider.getTemporaryDirectory();
         File filess = createFile("${dir.absolute.path}/test.png");
-        filess.writeAsBytesSync(byteData.buffer.asUint8List());
+        filess.writeAsBytesSync(utf8.encode(images[i].path));
         final result = await FlutterImageCompress.compressWithList(
-          byteData.buffer.asUint8List(),
+          utf8.encode(images[i].path),
           minHeight: 720,
           minWidth: 720,
           quality: 60,
@@ -697,10 +697,12 @@ class HomeVendorApis {
         Helper.getSheetError("${response.data['message']}");
       }
     } catch (e) {
+      log(e);
       homeVendorController.clearImage();
 
-      print(e);
       ProgressDialogUtils.hide();
+
+      print(e);
     }
   }
 
@@ -912,7 +914,7 @@ class HomeVendorApis {
   }
 
   addShipOffers(
-    List<Asset> images,
+    List<XFile> images,
     String serviceId,
     String dayPrice,
     String prepaid,
@@ -943,13 +945,13 @@ class HomeVendorApis {
       }
 
       for (int i = 0; i < images.length; i++) {
-        ByteData byteData = await images[i].getByteData();
+        // ByteData byteData = await images[i].getByteData();
 
         final dir = await path_provider.getTemporaryDirectory();
         File filess = createFile("${dir.absolute.path}/test.png");
-        filess.writeAsBytesSync(byteData.buffer.asUint8List());
+        filess.writeAsBytesSync(utf8.encode(images[i].path));
         final result = await FlutterImageCompress.compressWithList(
-          byteData.buffer.asUint8List(),
+          utf8.encode(images[i].path),
           minHeight: 720,
           minWidth: 720,
           quality: 60,
@@ -971,9 +973,9 @@ class HomeVendorApis {
       FormData data = FormData.fromMap({
         'service_id': serviceId,
         ...mapImages ?? null,
-        'day_price': dayPrice,
+        'day_price': dayPrice.toString(),
         'prepaid': prepaid,
-        'price': price,
+        'price': price.toString(),
         'notes': notes,
         'offer': offer,
         'number_of_persones': numberOfPersones,
@@ -986,7 +988,7 @@ class HomeVendorApis {
         'time': time,
         "location_lat": mainVendorController.lat.toString(),
         "location_long": mainVendorController.long.toString(),
-        "price_for": priceFor,
+        "price_for": priceFor.toString(),
         "time_from": timeFrom,
         "time_to": timeTo,
       });
@@ -1002,13 +1004,15 @@ class HomeVendorApis {
             'Authorization': 'Bearer $token',
           },
           validateStatus: (status) {
-            return status < 600;
+            return status < 500;
           },
         ),
       );
-
+      print(response.data);
       if (response.data['code'].toString() == '200') {
         getGallery(isFirst: true);
+        myGet.Get.back();
+
         homeVendorController.clearImage();
         getMyOffers();
         ProgressDialogUtils.hide();
@@ -1019,11 +1023,13 @@ class HomeVendorApis {
       }
     } catch (e) {
       ProgressDialogUtils.hide();
+      Helper.getSheetSucsses("${e}");
+      // myGet.Get.back();
     }
   }
 
   updateShip(
-      List<Asset> images,
+      List<XFile> images,
       String serviceId,
       String dayPrice,
       List subServicesId,
@@ -1047,13 +1053,13 @@ class HomeVendorApis {
       }
 
       for (int i = 0; i < images.length; i++) {
-        ByteData byteData = await images[i].getByteData();
+        // ByteData byteData = await images[i].getByteData();
 
         final dir = await path_provider.getTemporaryDirectory();
         File filess = createFile("${dir.absolute.path}/test.png");
-        filess.writeAsBytesSync(byteData.buffer.asUint8List());
+        filess.writeAsBytesSync(utf8.encode(images[i].path));
         final result = await FlutterImageCompress.compressWithList(
-          byteData.buffer.asUint8List(),
+          utf8.encode(images[i].path),
           minHeight: 720,
           minWidth: 720,
           quality: 60,
@@ -1096,7 +1102,7 @@ class HomeVendorApis {
             'Authorization': 'Bearer $token',
           },
           validateStatus: (status) {
-            return status < 600;
+            return status < 500;
           },
         ),
       );
@@ -1105,6 +1111,7 @@ class HomeVendorApis {
         getGallery(isFirst: true);
         homeVendorController.clearImage();
         getMyShips();
+
         ProgressDialogUtils.hide();
         Helper.getSheetSucsses("${response.data['message']}");
       } else {
@@ -1117,7 +1124,7 @@ class HomeVendorApis {
   }
 
   updateShipOffers(
-      List<Asset> images,
+      List<XFile> images,
       String serviceId,
       String dayPrice,
       String prepaid,
@@ -1149,13 +1156,13 @@ class HomeVendorApis {
       }
 
       for (int i = 0; i < images.length; i++) {
-        ByteData byteData = await images[i].getByteData();
+        // ByteData byteData = await images[i].getByteData();
 
         final dir = await path_provider.getTemporaryDirectory();
         File filess = createFile("${dir.absolute.path}/test.png");
-        filess.writeAsBytesSync(byteData.buffer.asUint8List());
+        filess.writeAsBytesSync(utf8.encode(images[i].path));
         final result = await FlutterImageCompress.compressWithList(
-          byteData.buffer.asUint8List(),
+          utf8.encode(images[i].path),
           minHeight: 720,
           minWidth: 720,
           quality: 60,

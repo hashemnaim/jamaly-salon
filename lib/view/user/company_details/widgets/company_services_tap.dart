@@ -47,9 +47,11 @@ class CompanyServicesTap extends StatelessWidget {
                           .getOwnerDetalsData.value.data.serviceOwners[index];
                       return InkWell(
                         onTap: () {
-                          HomeUserApis.homeUserApis
-                              .getShipDetails(serviceOwners.id.toString());
-                          Get.to(ReservationConfirmationScreen(false));
+                          HomeUserApis.homeUserApis.getShipDetails(
+                              homeUserController.getOwnerDetalsData.value.data
+                                  .gallary[index].ship_id
+                                  .toString());
+                          Get.to(() => ReservationConfirmationScreen(false));
                         },
                         borderRadius: BorderRadius.circular(10.r),
                         child: Container(

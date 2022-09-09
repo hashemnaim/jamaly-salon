@@ -5,7 +5,6 @@ import 'package:yacht_booking/controller/user/home_user_controller.dart';
 import 'package:yacht_booking/controller/vendor/home_vendor_controller.dart';
 import 'package:yacht_booking/view/vendor/chat_details_provider_screen.dart';
 import 'package:yacht_booking/view/widgets/custom_app_bar.dart';
-import 'package:flutter_screenutil/size_extension.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:yacht_booking/common/app_colors.dart';
@@ -90,7 +89,7 @@ class RequestDetailsScreen extends StatelessWidget {
                                           InkWell(
                                             onTap: () {
                                               Get.to(
-                                                ChatDetailsScreenProvider(
+                                                () => ChatDetailsScreenProvider(
                                                   myId: homeUserController
                                                       .getProfileUserData
                                                       .value

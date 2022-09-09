@@ -10,10 +10,14 @@ import 'package:yacht_booking/apis/home_apis.dart';
 import 'package:yacht_booking/apis/home_vendor_apis.dart';
 import 'package:yacht_booking/view/widgets/custom_text.dart';
 
+import 'app_colors.dart';
+
 class Helper {
   static Widget loading() {
     return Center(
-      child: CircularProgressIndicator(),
+      child: CircularProgressIndicator(
+        color: AppColors.primaryColor,
+      ),
     );
   }
 
@@ -54,7 +58,7 @@ class Helper {
     if (data == null || data == '') {
       return 'الحقل مطلوب'.tr;
     } else if (!GetUtils.isEmail(data)) {
-      return 'The email is not appropriate'.tr;
+      return 'البريد الإلكتروني غير مناسب'.tr;
     }
   }
 
@@ -74,6 +78,16 @@ class Helper {
     }
   }
 
+  static validationConfirmPassword(String password, String password2) {
+    if (password == null || password == '') {
+      return 'الحقل مطلوب'.tr;
+    } else if (password.length < 8) {
+      return 'يجب ان يكون اكبر من 8 احرف'.tr;
+    } else if (password == password2) {
+      return 'تأكيد المرور غير صحيح'.tr;
+    }
+  }
+
   static getSheetError(String title) {
     return Get.snackbar(
       '',
@@ -89,27 +103,11 @@ class Helper {
     );
   }
 
-  static getSheetSucsses(String title) {
-    return Get.snackbar(
-      '',
-      '',
-      messageText: CustomText(
-        title.tr,
-        fontSize: 16,
-        fontWeight: FontWeight.normal,
-        fontColor: Colors.green,
-        textAlign: TextAlign.center,
-      ),
-      snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: Colors.white,
-    );
-  }
-
-  static openPicker(ImageSource imageSource) async {
+  static Future<CroppedFile> getImagePicker(ImageSource imageSource) async {
     final pickedFile = await ImagePicker().pickImage(source: imageSource);
 
     try {
-      File croppedFile = await ImageCropper().cropImage(
+      CroppedFile croppedFile = await ImageCropper().cropImage(
           sourcePath: pickedFile.path,
           aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
           aspectRatioPresets: Platform.isAndroid
@@ -130,19 +128,38 @@ class Helper {
                   CropAspectRatioPreset.ratio7x5,
                   CropAspectRatioPreset.ratio16x9
                 ],
-          androidUiSettings: AndroidUiSettings(
-              toolbarTitle: 'Yacht Booking App',
-              toolbarColor: Colors.blue,
-              toolbarWidgetColor: Colors.white,
-              initAspectRatio: CropAspectRatioPreset.original,
-              lockAspectRatio: false),
-          iosUiSettings: IOSUiSettings(
-            title: 'Cropper',
-          ));
+          uiSettings: [
+            AndroidUiSettings(
+                toolbarTitle: 'Cropper',
+                toolbarColor: AppColors.primaryColor,
+                toolbarWidgetColor: Colors.white,
+                initAspectRatio: CropAspectRatioPreset.original,
+                lockAspectRatio: false),
+            IOSUiSettings(
+              title: 'Cropper',
+            )
+          ]);
+
       return croppedFile;
     } catch (e) {
       return null;
     }
+  }
+
+  static getSheetSucsses(String title) {
+    return Get.snackbar(
+      '',
+      '',
+      messageText: CustomText(
+        title.tr,
+        fontSize: 16,
+        fontWeight: FontWeight.normal,
+        fontColor: Colors.green,
+        textAlign: TextAlign.center,
+      ),
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: Colors.white,
+    );
   }
 
   static getMainDataWithToken() async {
@@ -159,14 +176,14 @@ class Helper {
   }
 
   static getMainVendorDataWithToken() async {
-    HomeUserApis.homeUserApis.getProfile();
+    await HomeUserApis.homeUserApis.getProfile();
     HomeVendorApis.homeVendorApis.getRecievedOrderVendor("all");
-    HomeVendorApis.homeVendorApis.homeStatstic();
+    await HomeVendorApis.homeVendorApis.homeStatstic();
     HomeVendorApis.homeVendorApis.getGallery(isFirst: true);
     HomeVendorApis.homeVendorApis.getVendorReviews();
     HomeVendorApis.homeVendorApis.getMyShips();
     HomeVendorApis.homeVendorApis.getMyOffers();
-    HomeVendorApis.homeVendorApis.getVendorServices();
+    await HomeVendorApis.homeVendorApis.getVendorServices();
     HomeVendorApis.homeVendorApis.getVendorSubServices("1");
     HomeVendorApis.homeVendorApis.getNotifications();
   }

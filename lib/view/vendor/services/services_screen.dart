@@ -129,7 +129,11 @@ class ServicesScreen extends StatelessWidget {
                                                     itemBuilder:
                                                         (context, index2) =>
                                                             Container(
-                                                              width: 100.w,
+                                                              padding: const EdgeInsets
+                                                                      .symmetric(
+                                                                  horizontal:
+                                                                      4),
+                                                              // width: 100.w,
                                                               height: 35.h,
                                                               decoration:
                                                                   BoxDecoration(
@@ -214,18 +218,13 @@ class ServicesScreen extends StatelessWidget {
                                         children: [
                                           Row(
                                             children: [
-                                              // SvgPicture.asset(
-                                              //   Assets.getIconSvg('shape'),
-                                              //   height: 15.r,
-                                              //   width: 15.r,
-                                              // ),
                                               Icon(
                                                 Icons
                                                     .miscellaneous_services_outlined,
-                                                size: 22.r,
+                                                size: 18.r,
                                                 color: AppColors.primaryColor,
                                               ),
-                                              SizedBox(width: 5.w),
+                                              SizedBox(width: 3.w),
                                               CustomText(
                                                 'اسم الخدمه',
                                                 fontSize: 12,
@@ -375,7 +374,7 @@ class ServicesScreen extends StatelessWidget {
                                       ),
                                       SizedBox(height: 10.h),
                                       CustomText(
-                                        'صور اليخت:',
+                                        'الصور :',
                                         alignment:
                                             AlignmentDirectional.centerStart,
                                         fontWeight: FontWeight.bold,
@@ -384,7 +383,7 @@ class ServicesScreen extends StatelessWidget {
                                       SizedBox(
                                         height: 74.h,
                                         child: myShipModelData
-                                                .gallaryOwner.isEmpty
+                                                .galleryOwner.isEmpty
                                             ? Center(
                                                 child: CustomText(
                                                     "لا يوجد صور في المعرض الخاص بك"),
@@ -393,7 +392,7 @@ class ServicesScreen extends StatelessWidget {
                                                 scrollDirection:
                                                     Axis.horizontal,
                                                 itemCount: myShipModelData
-                                                    .gallaryOwner.length,
+                                                    .galleryOwner.length,
                                                 separatorBuilder:
                                                     (context, index3) =>
                                                         SizedBox(width: 10.w),
@@ -408,7 +407,7 @@ class ServicesScreen extends StatelessWidget {
                                                             10.r),
                                                     image: DecorationImage(
                                                       image: myShipModelData
-                                                                  .gallaryOwner[
+                                                                  .galleryOwner[
                                                                       index3]
                                                                   .imageUrl ==
                                                               null
@@ -417,7 +416,7 @@ class ServicesScreen extends StatelessWidget {
                                                                   'ship_1'))
                                                           : CachedNetworkImageProvider(
                                                               myShipModelData
-                                                                  .gallaryOwner[
+                                                                  .galleryOwner[
                                                                       index3]
                                                                   .imageUrl),
                                                       fit: BoxFit.cover,
@@ -433,10 +432,10 @@ class ServicesScreen extends StatelessWidget {
                                         children: [
                                           InkWell(
                                             onTap: () {
-                                              Get.to(EditServiceScreen(
-                                                myShipModelData:
-                                                    myShipModelData,
-                                              ));
+                                              Get.to(() => EditServiceScreen(
+                                                    myShipModelData:
+                                                        myShipModelData,
+                                                  ));
                                             },
                                             child: Row(
                                               children: [

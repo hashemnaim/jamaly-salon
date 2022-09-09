@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/size_extension.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:yacht_booking/apis/home_vendor_apis.dart';
 import 'package:yacht_booking/common/app_colors.dart';
@@ -68,13 +67,25 @@ class _AddNewServiceScreenState extends State<AddNewServiceScreen> {
     "من 5 الى 10",
     "اكثر من 10",
   ];
-  List<String> listTimeTo = [
-    "30 دقيقة",
-    "1 ساعة",
-    "2 ساعة",
-    "3 ساعات",
-    "4 ساعات",
-  ];
+  // List<String> listTimeTo = [
+  //   "30 دقيقة",
+  //   "1 ساعة",
+  //   "2 ساعة",
+  //   "3 ساعات",
+  //   "4 ساعات",
+  // ];
+  Map<double, String> listPeriodFrom = {
+    0.5: "30 دقيقة",
+    1.0: "ساعة",
+    2.0: "ساعتين",
+    3.0: "3 ساعات",
+    4.0: "4 ساعات",
+    5.0: "5 ساعات",
+    6.0: "6 ساعات",
+    7.0: "7 ساعات",
+    0.0: "مخصص",
+  };
+  double pricehuor = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -271,13 +282,17 @@ class _AddNewServiceScreenState extends State<AddNewServiceScreen> {
                         // ),
                         SizedBox(height: 10.h),
                         CustomTextFormField(
-                          hintText: 'اسم الخدمه',
+                          hintText: 'إسم الخدمه',
                           fillColor: Colors.white,
                           isBoxShadow: false,
                           onSaved: setName,
+                          isComplate: true,
+                          onFieldSubmitted: () {
+                            FocusScope.of(context).unfocus();
+                          },
                           validator: Helper.validationNull,
                           prefixIcon: Icon(
-                            Icons.miscellaneous_services_outlined,
+                            Icons.label,
                             size: 22.r,
                             color: AppColors.primaryColor,
                           ),
@@ -287,6 +302,10 @@ class _AddNewServiceScreenState extends State<AddNewServiceScreen> {
                           hintText: 'سعر الخدمه',
                           fillColor: Colors.white,
                           isBoxShadow: false,
+                          isComplate: true,
+                          onFieldSubmitted: () {
+                            FocusScope.of(context).unfocus();
+                          },
                           onSaved: setHourPrice,
                           textInputType: TextInputType.number,
                           validator: Helper.validationNull,
@@ -302,11 +321,14 @@ class _AddNewServiceScreenState extends State<AddNewServiceScreen> {
                               value: timeTo,
                               hint: "المدة",
                               onChanged: (val) {
+                                pricehuor = listPeriodFrom.keys.firstWhere(
+                                    (k) => listPeriodFrom[k] == val,
+                                    orElse: () => null);
                                 setState(() {
                                   timeTo = val;
                                 });
                               },
-                              itemsList: listTimeTo,
+                              itemsList: listPeriodFrom.values.toList(),
                               backgroundColor: Colors.white,
                             ),
                           ),
@@ -317,6 +339,10 @@ class _AddNewServiceScreenState extends State<AddNewServiceScreen> {
                           textInputType: TextInputType.number,
                           fillColor: Colors.white,
                           isBoxShadow: false,
+                          isComplate: true,
+                          onFieldSubmitted: () {
+                            FocusScope.of(context).unfocus();
+                          },
                           onSaved: setNoPerson,
                           validator: Helper.validationNull,
                           prefixIcon: Icon(
@@ -325,22 +351,7 @@ class _AddNewServiceScreenState extends State<AddNewServiceScreen> {
                             color: AppColors.primaryColor,
                           ),
                         ),
-                        // CustomDropDown(
-                        //   value: noPerson,
-                        //   hint: "عدد الاشخاص",
-                        //   itemsList: listNoPerson,
-                        //   onChanged: (val) {
-                        //     setState(() {
-                        //       noPerson = val;
-                        //     });
-                        //   },
-                        //   backgroundColor: Colors.white,
-                        //   fontColor: AppColors.hintColor,
-                        //   borderColor: AppColors.borderColor,
-                        //   iconColor: AppColors.hintColor,
-                        //   fontSize: 12,
-                        //   height: 55,
-                        // ),
+
                         SizedBox(height: 10.h),
                         homeVendorController
                                     .getVendorSubServicesData.value.data ==
@@ -472,13 +483,17 @@ class _AddNewServiceScreenState extends State<AddNewServiceScreen> {
                         SizedBox(height: 10.h),
                         InkWell(
                           onTap: () {
-                            homeVendorController.addImageOrder();
+                            homeVendorController.selectImage();
                           },
                           child: CustomTextFormField(
                             hintText: 'اضافة صور ',
                             fillColor: Colors.white,
                             isBoxShadow: false,
                             enabled: false,
+                            isComplate: true,
+                            onFieldSubmitted: () {
+                              FocusScope.of(context).unfocus();
+                            },
                             onSaved: setTest,
                             validator: Helper.validationnoo,
                             prefixIcon: Icon(
@@ -513,7 +528,7 @@ class _AddNewServiceScreenState extends State<AddNewServiceScreen> {
                           id: "imagesOrder",
                           init: HomeVendorController(),
                           builder: (controller) {
-                            return controller.resultImagePhoto.isEmpty
+                            return controller.imageList.isEmpty
                                 ? SizedBox()
                                 : Container(
                                     height: 75.h,
@@ -521,8 +536,7 @@ class _AddNewServiceScreenState extends State<AddNewServiceScreen> {
                                     child: ListView.separated(
                                       shrinkWrap: true,
                                       scrollDirection: Axis.horizontal,
-                                      itemCount:
-                                          controller.resultImagePhoto.length,
+                                      itemCount: controller.imageList.length,
                                       separatorBuilder: (context, index) =>
                                           SizedBox(width: 5.w),
                                       itemBuilder: (context, index) =>
@@ -533,17 +547,14 @@ class _AddNewServiceScreenState extends State<AddNewServiceScreen> {
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(8.r),
-                                          image: DecorationImage(
-                                            image: AssetThumbImageProvider(
-                                                controller
-                                                    .resultImagePhoto[index],
-                                                width: 100,
-                                                height: 75),
-                                            //  AssetImage(
-                                            //   Assets.getImage('bg'),
-                                            // ),
-                                            fit: BoxFit.cover,
-                                          ),
+                                          // image: DecorationImage(
+                                          //   image: AssetThumbImageProvider(
+                                          //       controller
+                                          //           .resultImagePhoto[index],
+                                          //       width: 100,
+                                          //       height: 75),
+                                          //   fit: BoxFit.cover,
+                                          // ),
                                         ),
                                         child: InkWell(
                                           onTap: () {
@@ -574,7 +585,9 @@ class _AddNewServiceScreenState extends State<AddNewServiceScreen> {
                                   );
                           },
                         ),
+
                         SizedBox(height: 10.h),
+
                         CustomText(
                           'طريقة الحجز:',
                           alignment: AlignmentDirectional.centerStart,
@@ -623,73 +636,89 @@ class _AddNewServiceScreenState extends State<AddNewServiceScreen> {
                           ],
                         ),
                         SizedBox(height: 15.h),
-                        CustomTextFormField(
-                          hintText: 'مبلغ العربون',
-                          fillColor: Colors.white,
-                          isBoxShadow: false,
-                          textInputType: TextInputType.number,
-                          onSaved: setPrePrice,
-                          validator: Helper.validationNull,
-                          prefixIcon: Icon(
-                            Icons.monetization_on,
-                            size: 22.r,
-                            color: AppColors.primaryColor,
-                          ),
-                          suffixIcon: Padding(
-                            padding: EdgeInsetsDirectional.only(end: 10.w),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Container(
-                                  height: 30.h,
-                                  child: VerticalDivider(thickness: 1),
+                        isCompleat2 == true
+                            ? Container()
+                            : CustomTextFormField(
+                                hintText: 'مبلغ العربون',
+                                fillColor: Colors.white,
+                                isBoxShadow: false,
+                                isComplate: true,
+                                onFieldSubmitted: () {
+                                  FocusScope.of(context).unfocus();
+                                },
+                                textInputType: TextInputType.number,
+                                onSaved: setPrePrice,
+                                validator: Helper.validationNull,
+                                prefixIcon: Icon(
+                                  Icons.monetization_on,
+                                  size: 22.r,
+                                  color: AppColors.primaryColor,
                                 ),
-                                CustomText(
-                                  'درهم',
-                                  fontSize: 10,
-                                  fontColor: AppColors.hintColor,
-                                  fontWeight: FontWeight.bold,
+                                suffixIcon: Padding(
+                                  padding:
+                                      EdgeInsetsDirectional.only(end: 10.w),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Container(
+                                        height: 30.h,
+                                        child: VerticalDivider(thickness: 1),
+                                      ),
+                                      CustomText(
+                                        'درهم',
+                                        fontSize: 10,
+                                        fontColor: AppColors.hintColor,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 10.h),
-                        CustomTextFormField(
-                          hintText: 'مبلغ الحجز كاملاً',
-                          fillColor: Colors.white,
-                          isBoxShadow: false,
-                          onSaved: setTotalPrice,
-                          validator: Helper.validationNull,
-                          prefixIcon: Icon(
-                            Icons.monetization_on,
-                            size: 22.r,
-                            color: AppColors.primaryColor,
-                          ),
-                          suffixIcon: Padding(
-                            padding: EdgeInsetsDirectional.only(end: 10.w),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Container(
-                                  height: 30.h,
-                                  child: VerticalDivider(thickness: 1),
-                                ),
-                                CustomText(
-                                  'درهم',
-                                  fontSize: 10,
-                                  fontColor: AppColors.hintColor,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                              ),
+                        // SizedBox(height: 10.h),
+                        // isCompleat2 == true
+                        //     ? Container()
+                        //     : CustomTextFormField(
+                        //         hintText: 'مبلغ الحجز كاملاً',
+                        //         fillColor: Colors.white,
+                        //         isBoxShadow: false,
+                        //         onSaved: setTotalPrice,
+                        //         textInputType: TextInputType.number,
+                        //         validator: Helper.validationNull,
+                        //         prefixIcon: Icon(
+                        //           Icons.monetization_on,
+                        //           size: 22.r,
+                        //           color: AppColors.primaryColor,
+                        //         ),
+                        //         suffixIcon: Padding(
+                        //           padding:
+                        //               EdgeInsetsDirectional.only(end: 10.w),
+                        //           child: Row(
+                        //             mainAxisSize: MainAxisSize.min,
+                        //             children: [
+                        //               Container(
+                        //                 height: 30.h,
+                        //                 child: VerticalDivider(thickness: 1),
+                        //               ),
+                        //               CustomText(
+                        //                 'درهم',
+                        //                 fontSize: 10,
+                        //                 fontColor: AppColors.hintColor,
+                        //                 fontWeight: FontWeight.bold,
+                        //               ),
+                        //             ],
+                        //           ),
+                        //         ),
+                        //       ),
+
                         SizedBox(height: 10.h),
                         CustomTextFormField(
                           hintText: 'يمكنك إضافة ملاحظات إضافية في الخدمه',
                           fillColor: Colors.white,
                           isBoxShadow: false,
+                          isComplate: true,
+                          onFieldSubmitted: () {
+                            FocusScope.of(context).unfocus();
+                          },
                           maxLines: 3,
                           onSaved: setNote,
                           validator: Helper.validationnoo,
@@ -713,22 +742,27 @@ class _AddNewServiceScreenState extends State<AddNewServiceScreen> {
                           if (selectedIndex == null) {
                             Helper.getSheetError("يجب تحديد الخدمه");
                           } else {
-                            // Get.back();
-                            await HomeVendorApis.homeVendorApis.addShip(
-                                homeVendorController.resultImagePhoto,
-                                selectedIndex,
-                                hourPrice,
-                                selectedSubId,
-                                prePrice,
-                                totalPrice,
-                                note,
-                                "0",
-                                noPerson,
-                                isCompleat2 ? "cash" : "prepaid",
-                                name,
-                                timeTo);
-                            // Get.back();
+                            if (homeVendorController.imageList.length == 0) {
+                              Helper.getSheetError("يجب اضافة صورة للخدمة");
+                            } else {
+                              await HomeVendorApis.homeVendorApis.addShip(
+                                  homeVendorController.imageList,
+                                  selectedIndex,
+                                  hourPrice,
+                                  selectedSubId,
+                                  isCompleat2 ? "" : prePrice,
+                                  hourPrice,
+                                  note,
+                                  "0",
+                                  noPerson,
+                                  isCompleat2 ? "cash" : "prepaid",
+                                  name,
+                                  pricehuor);
+                            }
                           }
+                          // Get.back();
+
+                          // Get.back();
                         }
                       }),
                 ],

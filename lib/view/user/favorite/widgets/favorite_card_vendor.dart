@@ -22,7 +22,7 @@ class FavoriteCardVendor extends StatelessWidget {
       onTap: () {
         HomeUserApis.homeUserApis
             .getOwnerDetails(favoriteModelData.vendorId.toString());
-        Get.to(CompanyDetailsScreen());
+        Get.to(() => CompanyDetailsScreen());
       },
       borderRadius: BorderRadius.circular(12.r),
       child: Container(

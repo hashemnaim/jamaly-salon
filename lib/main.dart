@@ -29,7 +29,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
-    // NotificationHelper().initialNotification();
+    NotificationHelper().initialNotification();
     super.initState();
   }
 
@@ -41,12 +41,17 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.light,
       initialBinding: Binding(),
-      translations: Messages(),
-      // locale: Locale(
-      //     SPHelper.spHelper.getLanguage() ?? Get.deviceLocale.languageCode),
-      locale: Locale('ar', 'AR'),
+      translations: Lang(),
+      locale: Locale(
+          SPHelper.spHelper.getLanguage() ?? Get.deviceLocale.languageCode),
       fallbackLocale: Locale('ar'),
       theme: ThemeData(
+        appBarTheme: AppBarTheme(
+            systemOverlayStyle: SystemUiOverlayStyle(
+                statusBarColor: Colors.amber,
+                systemNavigationBarColor: Colors.amber,
+                statusBarIconBrightness: Brightness.dark,
+                statusBarBrightness: Brightness.dark)),
         fontFamily: 'Cairo',
         scaffoldBackgroundColor: Colors.white,
         primaryColor: AppColors.primaryColor,
@@ -54,8 +59,7 @@ class _MyAppState extends State<MyApp> {
       ),
       home: ScreenUtilInit(
         designSize: Size(375, 881),
-        allowFontScaling: true,
-        builder: () {
+        builder: (contex, child) {
           return MyHomePage();
         },
       ),

@@ -21,7 +21,7 @@ class CardRequestOrder extends StatelessWidget {
       onTap: () {
         HomeVendorApis.homeVendorApis
             .getRequestDetails(recevedOrderData.id.toString());
-        Get.to(RequestDetailsScreen2());
+        Get.to(() => RequestDetailsScreen2());
       },
       borderRadius: BorderRadius.circular(10.r),
       child: Container(

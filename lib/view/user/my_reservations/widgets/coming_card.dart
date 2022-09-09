@@ -44,7 +44,7 @@ class ComingCard extends StatelessWidget {
                         onTap: () {
                           HomeUserApis.homeUserApis
                               .getOwnerDetails(newOrders.owner.id.toString());
-                          Get.to(CompanyDetailsScreen());
+                          Get.to(() => CompanyDetailsScreen());
                         },
                         borderRadius: BorderRadius.circular(12.r),
                         child: Container(
@@ -104,7 +104,7 @@ class ComingCard extends StatelessWidget {
                                         InkWell(
                                           onTap: () {
                                             Get.to(
-                                              ChatDetailsScreenProvider(
+                                              () => ChatDetailsScreenProvider(
                                                 myId: homeUserController
                                                     .getProfileUserData
                                                     .value

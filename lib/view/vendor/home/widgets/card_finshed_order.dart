@@ -203,7 +203,7 @@ class CardFinshedOrder extends StatelessWidget {
                       onTap: () {
                         HomeVendorApis.homeVendorApis
                             .detailsOrder(recevedOrderData.id.toString());
-                        Get.to(ReservationDetailsScreen("finshed"));
+                        Get.to(() => ReservationDetailsScreen("finshed"));
                       },
                       child: Container(
                         padding: EdgeInsets.symmetric(horizontal: 8.r),

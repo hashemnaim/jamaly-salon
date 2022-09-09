@@ -27,111 +27,112 @@ class MainVendor extends StatelessWidget {
       builder: (controller) => Scaffold(
         resizeToAvoidBottomInset: false,
         body: pagesList[controller.pageIndex],
-        bottomNavigationBar: SafeArea(
-          child: Container(
-            height: 65,
-            decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey[300],
-                  offset: Offset(0, -10),
-                  blurRadius: 8,
-                  spreadRadius: 1,
-                  blurStyle: BlurStyle.normal,
-                ),
-              ],
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20.r),
-                topRight: Radius.circular(20.r),
+        bottomNavigationBar: Container(
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey[200],
+                offset: Offset(0, -10),
+                blurRadius: 8,
+                spreadRadius: 1,
+                blurStyle: BlurStyle.normal,
               ),
+            ],
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20.r),
+              topRight: Radius.circular(20.r),
             ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20.r),
-                topRight: Radius.circular(20.r),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20.r),
+              topRight: Radius.circular(20.r),
+            ),
+            child: Container(
+              height: 80.h,
+              decoration: BoxDecoration(
+                color: Colors.white,
               ),
-              child: Container(
-                height: 65,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                ),
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.w),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      InkWell(
-                        onTap: () {
-                          mainVendorController.setIsFirstScreen(true);
-                          controller.changePageIndex(0);
-                        },
-                        child: Container(
-                          width: 55.w,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset(
-                                'assets/main_icons/bookmark.svg',
-                                alignment: AlignmentDirectional.center,
-                                fit: BoxFit.contain,
-                                height: 22.r,
-                                width: 22.r,
-                                color: controller.pageIndex == 0
-                                    ? AppColors.primaryColor
-                                    : Colors.black,
-                              ),
-                              SizedBox(height: 5.h),
-                              CustomText(
-                                'الرئيسية',
-                                height: 1.4,
-                                fontSize: 11,
-                                fontWeight: FontWeight.bold,
-                                fontColor: controller.pageIndex == 0
-                                    ? AppColors.primaryColor
-                                    : Colors.black,
-                              ),
-                            ],
-                          ),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10.w),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    InkWell(
+                      onTap: () {
+                        mainVendorController.setIsFirstScreen(true);
+                        controller.changePageIndex(0);
+                      },
+                      child: Container(
+                        width: 55.w,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SizedBox(height: 10.h),
+                            SvgPicture.asset(
+                              'assets/main_icons/bookmark.svg',
+                              alignment: AlignmentDirectional.center,
+                              fit: BoxFit.contain,
+                              height: 20,
+                              width: 20,
+                              color: controller.pageIndex == 0
+                                  ? AppColors.primaryColor
+                                  : Colors.black,
+                            ),
+                            CustomText(
+                              'الرئيسية',
+                              height: 2,
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                              fontColor: controller.pageIndex == 0
+                                  ? AppColors.primaryColor
+                                  : Colors.black,
+                            ),
+                          ],
                         ),
                       ),
-                      Spacer(flex: 1),
-                      InkWell(
-                        onTap: () {
-                          controller.changePageIndex(1);
-                        },
-                        child: Container(
-                          width: 55.w,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset(
-                                'assets/main_icons/offers.svg',
-                                alignment: AlignmentDirectional.center,
-                                fit: BoxFit.contain,
-                                height: 22.r,
-                                width: 22.r,
-                                color: controller.pageIndex == 1
-                                    ? AppColors.primaryColor
-                                    : Colors.black,
-                              ),
-                              SizedBox(height: 5.h),
-                              CustomText(
-                                'الخدمات',
-                                height: 1.4,
-                                fontSize: 11,
-                                fontWeight: FontWeight.bold,
-                                fontColor: controller.pageIndex == 1
-                                    ? AppColors.primaryColor
-                                    : Colors.black,
-                              ),
-                            ],
-                          ),
+                    ),
+                    Spacer(flex: 1),
+                    InkWell(
+                      onTap: () {
+                        controller.changePageIndex(1);
+                      },
+                      child: Container(
+                        width: 55.w,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SizedBox(height: 10.h),
+                            SvgPicture.asset(
+                              'assets/main_icons/offers.svg',
+                              alignment: AlignmentDirectional.center,
+                              fit: BoxFit.contain,
+                              height: 20,
+                              width: 20,
+                              color: controller.pageIndex == 1
+                                  ? AppColors.primaryColor
+                                  : Colors.black,
+                            ),
+                            CustomText(
+                              'الخدمات',
+                              height: 2,
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                              fontColor: controller.pageIndex == 1
+                                  ? AppColors.primaryColor
+                                  : Colors.black,
+                            ),
+                          ],
                         ),
                       ),
-                      Spacer(flex: 1),
-                      SizedBox(
+                    ),
+                    Spacer(flex: 1),
+                    Padding(
+                      padding: const EdgeInsets.all(2.0),
+                      child: SizedBox(
                         height: 55.r,
                         width: 55.r,
                         child: FloatingActionButton(
@@ -152,78 +153,78 @@ class MainVendor extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Spacer(flex: 1),
-                      InkWell(
-                        onTap: () {
-                          controller.changePageIndex(3);
-                        },
-                        child: Container(
-                          width: 55.w,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset(
-                                'assets/main_icons/bookmark.svg',
-                                alignment: AlignmentDirectional.center,
-                                fit: BoxFit.contain,
-                                height: 22.r,
-                                width: 22.r,
-                                color: controller.pageIndex == 3
-                                    ? AppColors.primaryColor
-                                    : Colors.black,
-                              ),
-                              SizedBox(height: 5.h),
-                              CustomText(
-                                'العروض',
-                                height: 1.4,
-                                fontSize: 11,
-                                fontWeight: FontWeight.bold,
-                                fontColor: controller.pageIndex == 3
-                                    ? AppColors.primaryColor
-                                    : Colors.black,
-                              ),
-                            ],
-                          ),
+                    ),
+                    Spacer(flex: 1),
+                    InkWell(
+                      onTap: () {
+                        controller.changePageIndex(3);
+                      },
+                      child: Container(
+                        width: 55.w,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SizedBox(height: 10.h),
+                            SvgPicture.asset(
+                              'assets/main_icons/bookmark.svg',
+                              alignment: AlignmentDirectional.center,
+                              fit: BoxFit.contain,
+                              height: 20,
+                              width: 20,
+                              color: controller.pageIndex == 3
+                                  ? AppColors.primaryColor
+                                  : Colors.black,
+                            ),
+                            CustomText(
+                              'العروض',
+                              height: 2,
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                              fontColor: controller.pageIndex == 3
+                                  ? AppColors.primaryColor
+                                  : Colors.black,
+                            ),
+                          ],
                         ),
                       ),
-                      Spacer(flex: 1),
-                      InkWell(
-                        onTap: () {
-                          controller.changePageIndex(4);
-                        },
-                        child: Container(
-                          width: 55.w,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset(
-                                'assets/main_icons/user.svg',
-                                alignment: AlignmentDirectional.center,
-                                fit: BoxFit.contain,
-                                height: 22.r,
-                                width: 22.r,
-                                color: controller.pageIndex == 4
-                                    ? AppColors.primaryColor
-                                    : Colors.black,
-                              ),
-                              SizedBox(height: 5.h),
-                              CustomText(
-                                'حسابي',
-                                height: 1.4,
-                                fontSize: 11,
-                                fontWeight: FontWeight.bold,
-                                fontColor: controller.pageIndex == 4
-                                    ? AppColors.primaryColor
-                                    : Colors.black,
-                              ),
-                            ],
-                          ),
+                    ),
+                    Spacer(flex: 1),
+                    InkWell(
+                      onTap: () {
+                        controller.changePageIndex(4);
+                      },
+                      child: Container(
+                        width: 55.w,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SizedBox(height: 10.h),
+                            SvgPicture.asset(
+                              'assets/main_icons/user.svg',
+                              alignment: AlignmentDirectional.center,
+                              fit: BoxFit.contain,
+                              height: 20,
+                              width: 20,
+                              color: controller.pageIndex == 4
+                                  ? AppColors.primaryColor
+                                  : Colors.black,
+                            ),
+                            CustomText(
+                              'حسابي',
+                              height: 2,
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                              fontColor: controller.pageIndex == 4
+                                  ? AppColors.primaryColor
+                                  : Colors.black,
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),

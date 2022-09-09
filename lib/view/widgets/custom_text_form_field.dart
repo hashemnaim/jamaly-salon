@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yacht_booking/common/app_colors.dart';
 
@@ -18,11 +21,14 @@ class CustomTextFormField extends StatefulWidget {
   final bool enabled;
   final Widget suffixIcon;
   final bool textExit;
-  final Function onSaved, validator;
+  final bool isComplate;
+  final Function onSaved, validator, onFieldSubmitted;
   final String labelText;
   final Color fillColor;
+  final FocusNode focusNode;
   final bool isBoxShadow;
   final bool isBorderRadius;
+  final TextInputAction textInputAction;
   final double height;
   final bool isBorderSide;
 
@@ -36,13 +42,17 @@ class CustomTextFormField extends StatefulWidget {
     this.obscureText = false,
     this.textInputType,
     this.hintText,
+    this.focusNode,
+    this.textInputAction = TextInputAction.done,
     this.maxLines = 1,
     this.hintStyleSize = 12,
     this.textStyleSize = 14,
     this.colorIcon = AppColors.primaryColor,
     this.enabled = true,
+    this.isComplate = false,
     this.onSaved,
     this.validator,
+    this.onFieldSubmitted,
     this.labelText,
     this.fillColor = AppColors.secondaryColor,
     this.isBoxShadow = true,
@@ -70,10 +80,18 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         controller: widget.textEditingController,
         validator: (value) => widget.validator(value),
         onSaved: (newValue) => widget.onSaved(newValue),
-        onChanged: (value) {
-          widget.onSaved(value);
-        },
+        onChanged: (value) => widget.onSaved(value),
+        // onFieldSubmitted: (value) => widget.onFieldSubmitted(value),
+        onEditingComplete: () => widget.isComplate == false
+            ? () {
+                FocusScope.of(context).unfocus();
+                SystemChannels.textInput.invokeMethod('TextInput.hide');
+              }
+            : widget.onFieldSubmitted(),
+
+        focusNode: widget.focusNode,
         enabled: widget.enabled,
+        textInputAction: widget.textInputAction,
         maxLines: widget.maxLines,
         initialValue: widget.textInitialValue,
         keyboardType: widget.textInputType,

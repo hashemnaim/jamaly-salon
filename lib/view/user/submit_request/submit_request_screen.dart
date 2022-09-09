@@ -43,18 +43,18 @@ class _SubmitRequestScreenState extends State<SubmitRequestScreen> {
     "الشارقة",
     "أم القيوين",
   ];
-
-  List<String> listPeriodFrom = [
-    "30 دقيقة",
-    "ساغه",
-    "ساعتين",
-    "3 ساعات",
-    "4 ساعات",
-    "5 ساعات",
-    "6 ساعات",
-    "7 ساعات",
-    "مخصص",
-  ];
+  double pricehuor = 1;
+  Map<double, String> listPeriodFrom = {
+    0.5: "30 دقيقة",
+    1.0: "ساعة",
+    2.0: "ساعتين",
+    3.0: "3 ساعات",
+    4.0: "4 ساعات",
+    5.0: "5 ساعات",
+    6.0: "6 ساعات",
+    7.0: "7 ساعات",
+    0.0: "مخصص",
+  };
   List<String> listPeriodTo = [
     "30 دقيقه",
   ];
@@ -204,7 +204,7 @@ class _SubmitRequestScreenState extends State<SubmitRequestScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: 'حجزك حسب ميزانيتك',
+        title: 'طلبك حسب ميزانيتك',
         backFun: () => Get.back(),
       ),
       body: SingleChildScrollView(
@@ -221,7 +221,7 @@ class _SubmitRequestScreenState extends State<SubmitRequestScreen> {
                 borderRadius: BorderRadius.circular(10.r),
               ),
               child: CustomText(
-                'صمم حجزك الخاص حسب ميزانيتك من خلال تحديد خياراتك المفضلة وستصلك العروض من مزودي الخدمه',
+                'صمم طلبك الخاص حسب ميزانيتك من خلال تحديد خياراتك المفضلة وستصلك العروض من مزودي الخدمه',
                 maxLines: 5,
                 fontSize: 13,
                 fontWeight: FontWeight.bold,
@@ -379,19 +379,15 @@ class _SubmitRequestScreenState extends State<SubmitRequestScreen> {
                         SizedBox(height: 5.h),
                         CustomTextFormField(
                           hintText: 'الميزانية',
-                          // prefixIcon: Icon(
-                          //   Icons.lock,
-                          //   size: 22.r,
-                          //   color: AppColors.hintColor,
-                          // ),
                           isBoxShadow: false,
                           fillColor: Colors.white,
                           onSaved: setPrice,
+                          textInputType: TextInputType.number,
                           validator: Helper.validationNull,
                         ),
                         SizedBox(height: 10.h),
                         CustomText(
-                          'تفاصيل الحجز:',
+                          'تفاصيل الحجز :',
                           fontWeight: FontWeight.bold,
                           alignment: AlignmentDirectional.centerStart,
                           fontSize: 13,
@@ -410,26 +406,17 @@ class _SubmitRequestScreenState extends State<SubmitRequestScreen> {
                             ),
                             Expanded(
                                 child: CustomDropDown(
-                              value: periodFrom,
+                              value: pricehuor == 0.0 ? "مخصص" : periodFrom,
+                              fontColor: Color.fromRGBO(0, 0, 0, 0.38),
                               hint: "ساعة",
                               onChanged: (val) {
                                 setPeriodTime(val);
+                                pricehuor = listPeriodFrom.keys.firstWhere(
+                                    (k) => listPeriodFrom[k] == val,
+                                    orElse: () => null);
                               },
-                              itemsList: listPeriodFrom,
-                              backgroundColor: Colors.grey[300],
+                              itemsList: listPeriodFrom.values.toList(),
                             )),
-                            // SizedBox(width: 8.w),
-                            // Expanded(
-                            //     child: CustomDropDown(
-                            //       value: periodTo,
-                            //       hint: "دقيقة",
-                            //       onChanged: (val) {
-                            //         setState(() {
-                            //           periodTo = val;
-                            //         });
-                            //       },
-                            //       itemsList:listPeriodTo,
-                            //     )),
                           ],
                         ),
                         Visibility(
@@ -502,23 +489,13 @@ class _SubmitRequestScreenState extends State<SubmitRequestScreen> {
                                 validator: Helper.validationNull,
                                 enabled: false,
                               ),
-                            )
-                                //     CustomDropDown(
-                                //   value: timeTo,
-                                //   hint: "الى",
-                                //   onChanged: (val) {
-                                //     setState(() {
-                                //       timeTo = val;
-                                //     });
-                                //   },
-                                //   itemsList: listTimeTo,
-                                // )
-                                ),
+                            )),
                           ],
                         ),
                         SizedBox(height: 8.h),
                         CustomTextFormField(
                           hintText: 'عدد الأشخاص',
+                          textInputType: TextInputType.number,
                           prefixIcon: Padding(
                             padding: EdgeInsets.all(14),
                             child: SvgPicture.asset(
@@ -577,14 +554,14 @@ class _SubmitRequestScreenState extends State<SubmitRequestScreen> {
                                 height: 40.h,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10.r),
-                                  color: Colors.grey[300],
+                                  color: Colors.white,
                                   border: Border.all(
                                       color: AppColors.secondaryColor),
                                   // boxShadow: AppColors.boxShadow,
                                 ),
                                 child: CustomText(
                                   selectedDateNew == null
-                                      ? "تاريخ الحجز"
+                                      ? "حدد تاريخ الحجز"
                                       : selectedDateNew,
                                   fontColor: Colors.grey[400],
                                   fontWeight: FontWeight.bold,
@@ -600,21 +577,25 @@ class _SubmitRequestScreenState extends State<SubmitRequestScreen> {
                         //   fontSize: 13,
                         // ),
                         // SizedBox(height: 3.h),
-                        // SmoothStarRating(
-                        //   allowHalfRating: false,
-                        //   onRated: (v) {
-                        //     setState(() {
-                        //       rate = v;
-                        //     });
-                        //   },
-                        //   starCount: 5,
-                        //   rating: rate,
-                        //   size: 30.r,
-                        //   isReadOnly: false,
-                        //   color: AppColors.yellow,
-                        //   borderColor: AppColors.yellow,
-                        //   spacing: 0.0,
-                        // ),
+                        //  RatingBar.builder(
+                        //             initialRating: topRatOfferModelData.rate == null
+                        //       ? 0
+                        //       : double.parse(topRatOfferModelData.rate.toString()),
+                        //             direction: Axis.horizontal,
+                        //             tapOnlyMode: true,
+                        //             ignoreGestures: true,
+                        //             allowHalfRating: true,
+                        //             itemCount: 5,
+                        //             itemSize: 16,
+                        //             itemPadding: const EdgeInsets.symmetric(
+                        //                 horizontal: 1.0),
+                        //             itemBuilder: (context, _) => const Icon(
+                        //               Icons.star,
+                        //               color: Colors.amber,
+                        //               size: 1,
+                        //             ),
+                        //             onRatingUpdate: (rating) => null,
+                        //           ),
                       ],
                     ),
                   ),
@@ -630,12 +611,12 @@ class _SubmitRequestScreenState extends State<SubmitRequestScreen> {
                 isBoxShadow: false,
                 isBorderSide: false,
                 onSaved: setNote,
-                validator: Helper.validationNull,
+                validator: (value) {},
               ),
             ),
             SizedBox(height: 20),
             CustomButton(
-              text: 'قدم حجزك الآن',
+              text: 'قدم طلبك الآن',
               onTap: () {
                 if (requestOrder.currentState.validate()) {
                   requestOrder.currentState.save();
@@ -646,7 +627,7 @@ class _SubmitRequestScreenState extends State<SubmitRequestScreen> {
                         timeFrom.text,
                         timeTo.text,
                         serviceId,
-                        periodFrom,
+                        periodFrom ?? "ساعة",
                         noPerson,
                         selectedDateNew,
                         price,

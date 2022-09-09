@@ -1,5 +1,7 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
- import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:yacht_booking/apis/home_apis.dart';
@@ -34,10 +36,14 @@ class CompanyGalleryTap extends StatelessWidget {
                         .getOwnerDetalsData.value.data.gallary.length,
                     (index) => InkWell(
                       onTap: () {
+                        log(homeUserController.getOwnerDetalsData.value.data
+                            .gallary[index].ship_id
+                            .toString());
                         HomeUserApis.homeUserApis.getShipDetails(
-                            homeUserController.getOwnerDetalsData.value.data.id
+                            homeUserController.getOwnerDetalsData.value.data
+                                .gallary[index].ship_id
                                 .toString());
-                        Get.to(ReservationConfirmationScreen(false));
+                        Get.to(() => ReservationConfirmationScreen(false));
                       },
                       borderRadius: BorderRadius.circular(10.r),
                       child: Container(

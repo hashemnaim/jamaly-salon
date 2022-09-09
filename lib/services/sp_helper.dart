@@ -21,7 +21,7 @@ class SPHelper {
     sharedPreferences.setString('language', value);
   }
 
-  getLanguage() async {
+  getLanguage()  {
     String x = sharedPreferences.getString('language');
     return x;
   }

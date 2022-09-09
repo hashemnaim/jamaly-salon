@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:yacht_booking/apis/auth_apis.dart';
-import 'package:yacht_booking/common/constant.dart';
 import 'package:yacht_booking/models/setting_app_model.dart';
 
 class AuthController extends GetxController {
@@ -13,7 +12,7 @@ class AuthController extends GetxController {
   String password;
   String mobile;
   int typeUser;
-  File imageProfile;
+  XFile imageProfile;
   String lat;
   String long;
   Rx<SettingAppModel> settingAppData = SettingAppModel().obs;
@@ -62,7 +61,7 @@ class AuthController extends GetxController {
   }
 
   setImageProfile() async {
-    File image = await getImagePicker(ImageSource.gallery);
+    XFile image = await ImagePicker().pickImage(source: ImageSource.gallery);
     imageProfile = image;
     update(['profile']);
     AuthApis.authApis.setImageProfileUser(imageProfile);

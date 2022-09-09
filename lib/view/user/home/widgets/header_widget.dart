@@ -26,8 +26,8 @@ class HeaderWidget extends StatelessWidget {
     return Obx(() {
       return Container(
         width: double.infinity,
-        height: 200.h,
-        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 20.h),
+        height: 220.h,
+        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage(
@@ -49,160 +49,164 @@ class HeaderWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        InkWell(
-                            onTap: () {
-                              _bottomNavBarController.changeSelectedIndex(3);
-                            },
-                            child: homeUserController
-                                        .getProfileUserData.value.data.photo ==
-                                    null
-                                ? CustomAvatar(28, 27, 'person')
-                                : Container(
-                                    width: 62.r,
-                                    height: 62.r,
-                                    decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        border: Border.all(
-                                          color: Color(0xffFFE451),
-                                        )),
-                                    child: CachedNetworkImageShare(
-                                        homeUserController.getProfileUserData
-                                            .value.data.photo,
-                                        62.r,
-                                        62.r,
-                                        0),
-                                  )),
-                        SizedBox(width: 10.w),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  CustomText(
-                                    '${homeUserController.getProfileUserData.value.data.name ?? ''}',
-                                    fontColor: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      InkWell(
-                                        onTap: () {
-                                          FireBaseHelperProvider
-                                              .fireBaseHelperProvider
-                                              .getAllMyChats(
-                                            myId: homeUserController
-                                                .getProfileUserData
-                                                .value
-                                                .data
-                                                .id
-                                                .toString(),
-                                          );
-                                          Get.to(() => ChatScreenProvider());
-                                        },
-                                        child: Container(
-                                          padding:
-                                              EdgeInsetsDirectional.all(8.r),
-                                          child: Stack(
-                                            children: [
-                                              SvgPicture.asset(
-                                                Assets.getIconSvg('messages'),
-                                                height: 20.r,
-                                                width: 20.r,
-                                              ),
-                                              // Container(
-                                              //   height: 7.r,
-                                              //   width: 7.r,
-                                              //   decoration: BoxDecoration(
-                                              //     borderRadius:
-                                              //         BorderRadius.all(
-                                              //             Radius.elliptical(
-                                              //                 9999.0, 9999.0)),
-                                              //     color:
-                                              //         const Color(0xffff6464),
-                                              //   ),
-                                              // ),
-                                            ],
+                    Expanded(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          InkWell(
+                              onTap: () {
+                                _bottomNavBarController.changeSelectedIndex(3);
+                              },
+                              child: homeUserController.getProfileUserData.value
+                                          .data.photo ==
+                                      null
+                                  ? CustomAvatar(28, 27, 'person')
+                                  : Container(
+                                      width: 62.r,
+                                      height: 62.r,
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          border: Border.all(
+                                            color: Color(0xffFFE451),
+                                          )),
+                                      child: CachedNetworkImageShare(
+                                          homeUserController.getProfileUserData
+                                              .value.data.photo,
+                                          62.r,
+                                          62.r,
+                                          0),
+                                    )),
+                          SizedBox(width: 10.w),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    CustomText(
+                                      '${homeUserController.getProfileUserData.value.data.name ?? ''}',
+                                      fontColor: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        InkWell(
+                                          onTap: () {
+                                            FireBaseHelperProvider
+                                                .fireBaseHelperProvider
+                                                .getAllMyChats(
+                                              myId: homeUserController
+                                                  .getProfileUserData
+                                                  .value
+                                                  .data
+                                                  .id
+                                                  .toString(),
+                                            );
+                                            Get.to(() => ChatScreenProvider());
+                                          },
+                                          child: Container(
+                                            padding:
+                                                EdgeInsetsDirectional.all(8.r),
+                                            child: Stack(
+                                              children: [
+                                                SvgPicture.asset(
+                                                  Assets.getIconSvg('messages'),
+                                                  height: 20.r,
+                                                  width: 20.r,
+                                                ),
+                                                // Container(
+                                                //   height: 7.r,
+                                                //   width: 7.r,
+                                                //   decoration: BoxDecoration(
+                                                //     borderRadius:
+                                                //         BorderRadius.all(
+                                                //             Radius.elliptical(
+                                                //                 9999.0, 9999.0)),
+                                                //     color:
+                                                //         const Color(0xffff6464),
+                                                //   ),
+                                                // ),
+                                              ],
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      SizedBox(width: 5.w),
-                                      InkWell(
-                                        onTap: () {
-                                          HomeVendorApis.homeVendorApis
-                                              .getNotifications();
-                                          Get.to(NotificationScreen());
-                                        },
-                                        child: Container(
-                                          padding:
-                                              EdgeInsetsDirectional.all(8.r),
-                                          child: Stack(
-                                            children: [
-                                              SvgPicture.asset(
-                                                Assets.getIconSvg(
-                                                    'notifications'),
-                                                height: 20.r,
-                                                width: 20.r,
-                                              ),
-                                              // Container(
-                                              //   height: 7.r,
-                                              //   width: 7.r,
-                                              //   decoration: BoxDecoration(
-                                              //     borderRadius:
-                                              //         BorderRadius.all(
-                                              //             Radius.elliptical(
-                                              //                 9999.0, 9999.0)),
-                                              //     color:
-                                              //         const Color(0xffff6464),
-                                              //   ),
-                                              // ),
-                                            ],
+                                        SizedBox(width: 5.w),
+                                        InkWell(
+                                          onTap: () {
+                                            HomeVendorApis.homeVendorApis
+                                                .getNotifications();
+                                            Get.to(() => NotificationScreen());
+                                          },
+                                          child: Container(
+                                            padding:
+                                                EdgeInsetsDirectional.all(8.r),
+                                            child: Stack(
+                                              children: [
+                                                SvgPicture.asset(
+                                                  Assets.getIconSvg(
+                                                      'notifications'),
+                                                  height: 20.r,
+                                                  width: 20.r,
+                                                ),
+                                                // Container(
+                                                //   height: 7.r,
+                                                //   width: 7.r,
+                                                //   decoration: BoxDecoration(
+                                                //     borderRadius:
+                                                //         BorderRadius.all(
+                                                //             Radius.elliptical(
+                                                //                 9999.0, 9999.0)),
+                                                //     color:
+                                                //         const Color(0xffff6464),
+                                                //   ),
+                                                // ),
+                                              ],
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  SvgPicture.asset(
-                                    Assets.getIconSvg('call'),
-                                    height: 15.r,
-                                    width: 15.r,
-                                    alignment: AlignmentDirectional.centerStart,
-                                  ),
-                                  SizedBox(width: 5.w),
-                                  CustomText(
-                                    '${homeUserController.getProfileUserData.value.data.mobile ?? ''}',
-                                    fontColor: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15,
-                                    textAlign: TextAlign.start,
-                                    alignment: AlignmentDirectional.centerStart,
-                                  ),
-                                ],
-                              ),
-                            ],
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    SvgPicture.asset(
+                                      Assets.getIconSvg('call'),
+                                      height: 15.r,
+                                      width: 15.r,
+                                      alignment:
+                                          AlignmentDirectional.centerStart,
+                                    ),
+                                    SizedBox(width: 5.w),
+                                    CustomText(
+                                      '${homeUserController.getProfileUserData.value.data.mobile ?? ''}',
+                                      fontColor: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15,
+                                      textAlign: TextAlign.start,
+                                      alignment:
+                                          AlignmentDirectional.centerStart,
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                     InkWell(
                       onTap: () {
                         HomeUserApis.homeUserApis.getServices();
-                        Get.to(FilterScreen());
+                        Get.to(() => FilterScreen());
                       },
                       borderRadius: BorderRadius.circular(10.r),
                       child: Container(

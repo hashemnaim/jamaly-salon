@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/size_extension.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:yacht_booking/apis/home_vendor_apis.dart';
@@ -97,7 +96,7 @@ class ReservationDetailsScreen extends StatelessWidget {
                                       InkWell(
                                         onTap: () {
                                           Get.to(
-                                            ChatDetailsScreenProvider(
+                                            () => ChatDetailsScreenProvider(
                                               myId: homeUserController
                                                   .getProfileUserData
                                                   .value

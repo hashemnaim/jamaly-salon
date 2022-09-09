@@ -1,7 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:yacht_booking/apis/auth_apis.dart';
 import 'package:yacht_booking/common/app_colors.dart';
@@ -22,7 +21,8 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
   final MainVendorController _mainVendorController = Get.find();
-
+  FocusNode focusNode1 = FocusNode();
+  FocusNode focusNode2 = FocusNode();
   String email, password;
   setEmail(String value) {
     this.email = value;
@@ -259,7 +259,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                   color: AppColors.hintColor,
                                 ),
                                 isBoxShadow: false,
+                                isComplate: true,
                                 fillColor: Colors.white,
+                                focusNode: focusNode1,
+                                onFieldSubmitted: () {
+                                  focusNode1.nextFocus();
+                                },
                                 textInputType: TextInputType.emailAddress,
                                 onSaved: setEmail,
                                 validator: Helper.validationEmail,
@@ -272,6 +277,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                   size: 22.r,
                                   color: AppColors.hintColor,
                                 ),
+                                focusNode: focusNode2,
+                                isComplate: true,
+                                onFieldSubmitted: () {
+                                  focusNode2.nextFocus();
+                                },
                                 isBoxShadow: false,
                                 fillColor: Colors.white,
                                 obscureText: true,

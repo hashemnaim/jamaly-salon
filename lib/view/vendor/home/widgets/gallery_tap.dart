@@ -92,7 +92,6 @@ class GalleryTap extends StatelessWidget {
                       )
                     : LazyLoadScrollView(
                         onEndOfPage: () {
-                        
                           if (homeVendorController.getGallaryVendorData.value
                                   .data.currentPage ==
                               homeVendorController
@@ -119,14 +118,14 @@ class GalleryTap extends StatelessWidget {
                                 .getGallaryVendorData.value.data.data.length,
                             (index) => InkWell(
                               onTap: () {
-                                Get.to(ImgeView(
-                                  imageFile: homeVendorController
-                                      .getGallaryVendorData
-                                      .value
-                                      .data
-                                      .data[index]
-                                      .imageUrl,
-                                ));
+                                Get.to(() => ImgeView(
+                                      imageFile: homeVendorController
+                                          .getGallaryVendorData
+                                          .value
+                                          .data
+                                          .data[index]
+                                          .imageUrl,
+                                    ));
                               },
                               borderRadius: BorderRadius.circular(10.r),
                               child: Container(
@@ -185,7 +184,7 @@ class GalleryTap extends StatelessWidget {
                                                       onTap: () async {
                                                         dynamic file =
                                                             await Helper
-                                                                .openPicker(
+                                                                .getImagePicker(
                                                                     ImageSource
                                                                         .gallery);
                                                         if (file != null) {

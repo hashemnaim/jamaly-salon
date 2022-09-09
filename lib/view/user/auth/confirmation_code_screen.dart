@@ -16,9 +16,9 @@ import 'reset_password_screen.dart';
 class ConfirmationCodeScreen extends StatefulWidget {
   final String code;
   final String mobile;
+  final String type;
 
-
-   ConfirmationCodeScreen({this.code,this.mobile});
+  ConfirmationCodeScreen({this.code, this.mobile, this.type});
 
   @override
   _ConfirmationCodeScreenState createState() => _ConfirmationCodeScreenState();
@@ -27,11 +27,11 @@ class ConfirmationCodeScreen extends StatefulWidget {
 class _ConfirmationCodeScreenState extends State<ConfirmationCodeScreen> {
   TextEditingController controller = TextEditingController();
 
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   controller.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -144,7 +144,7 @@ class _ConfirmationCodeScreenState extends State<ConfirmationCodeScreen> {
                             appContext: context,
                             length: 4,
                             obscureText: false,
-                             controller: controller,
+                            controller: controller,
                             animationType: AnimationType.fade,
                             cursorColor: AppColors.primaryColor,
                             keyboardType: TextInputType.number,
@@ -169,7 +169,6 @@ class _ConfirmationCodeScreenState extends State<ConfirmationCodeScreen> {
                               // codeDone = value;
                             },
                             beforeTextPaste: (text) {
-                        
                               return true;
                             },
                           ),
@@ -178,24 +177,24 @@ class _ConfirmationCodeScreenState extends State<ConfirmationCodeScreen> {
                         CustomButton(
                           text: 'استمرار',
                           onTap: () {
-                            if(controller.text==widget.code || controller.text=="8800"){
+                            if (controller.text == widget.code ||
+                                controller.text == "8800") {
                               AuthApis.authApis.verifyMobile(
-                               widget.mobile, controller.text);
-
-                            }else{
-                              Helper.getSheetError("الرمز المدخل غير صحيح , حاول مره اخرى");
+                                widget.mobile,
+                                controller.text,
+                              );
+                            } else {
+                              Helper.getSheetError(
+                                  "الرمز المدخل غير صحيح , حاول مره اخرى");
                             }
 
                             // Get.to(() => ResetPasswordScreen());
                           },
                         ),
-
                         SizedBox(
                           height: 20.h,
                         ),
-                        CustomText(
-                          "code : ${widget.code}"
-                        )
+                        CustomText("code : ${widget.code}")
                       ],
                     ),
                   ),

@@ -84,14 +84,14 @@ class _VendorProfileScreenState extends State<VendorProfileScreen> {
                       onTap: () {
                         if (index == 0) {
                           HomeVendorApis.homeVendorApis.getPlans();
-                          Get.to(UpgradeAccountScreen());
+                          Get.to(() => UpgradeAccountScreen());
                         } else if (index == 1) {
                           HomeVendorApis.homeVendorApis.getVendorReviews();
-                          Get.to(RattingScreen());
+                          Get.to(() => RattingScreen());
                         } else if (index == 2) {
-                          Get.to(TermsAndConditionsScreen());
+                          Get.to(() => TermsAndConditionsScreen());
                         } else if (index == 3) {
-                          Get.to(CommunicationScreen());
+                          Get.to(() => CommunicationScreen());
                         }
                         // else if (index == 4) {
                         //   Get.to(CommunicationScreen());
@@ -132,7 +132,7 @@ class _VendorProfileScreenState extends State<VendorProfileScreen> {
                     fit: BoxFit.cover,
                   ),
                   onTap: () {
-                    Get.offAll(WelcomeScreen());
+                    Get.offAll(() => WelcomeScreen());
                     _mainVendorController.pageIndex = 0;
 
                     AuthApis.authApis.logOutUser();

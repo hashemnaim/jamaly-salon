@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:smooth_star_rating/smooth_star_rating.dart';
 import 'package:yacht_booking/apis/home_vendor_apis.dart';
 import 'package:yacht_booking/common/app_colors.dart';
 import 'package:yacht_booking/common/assets.dart';
@@ -54,7 +54,7 @@ class StatisticsScreen extends StatelessWidget {
                                   'مدة الاشتراك',
                                   alignment: AlignmentDirectional.centerStart,
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 12,
+                                  fontSize: 14,
                                 ),
                               ],
                             ),
@@ -72,12 +72,12 @@ class StatisticsScreen extends StatelessWidget {
                                     children: [
                                       CustomText(
                                         'يوم',
-                                        fontSize: 10,
+                                        fontSize: 12,
                                         fontWeight: FontWeight.bold,
                                       ),
                                       CustomText(
                                         '${homeVendorController.homeStatsticData.value.data.remainDays ?? ''}',
-                                        fontSize: 10,
+                                        fontSize: 12,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ],
@@ -89,12 +89,12 @@ class StatisticsScreen extends StatelessWidget {
                                     children: [
                                       CustomText(
                                         'شهر',
-                                        fontSize: 10,
+                                        fontSize: 12,
                                         fontWeight: FontWeight.bold,
                                       ),
                                       CustomText(
                                         '${homeVendorController.homeStatsticData.value.data.remainMonths ?? ''}',
-                                        fontSize: 10,
+                                        fontSize: 12,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ],
@@ -106,12 +106,12 @@ class StatisticsScreen extends StatelessWidget {
                                     children: [
                                       CustomText(
                                         'سنة',
-                                        fontSize: 10,
+                                        fontSize: 12,
                                         fontWeight: FontWeight.bold,
                                       ),
                                       CustomText(
                                         '${homeVendorController.homeStatsticData.value.data.remainYears ?? ''}',
-                                        fontSize: 10,
+                                        fontSize: 12,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ],
@@ -124,7 +124,7 @@ class StatisticsScreen extends StatelessWidget {
                       ),
                       SizedBox(height: 15.h),
                       Container(
-                        padding: EdgeInsetsDirectional.all(15.r),
+                        padding: EdgeInsetsDirectional.all(16.r),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           boxShadow: AppColors.boxShadow,
@@ -141,17 +141,18 @@ class StatisticsScreen extends StatelessWidget {
                                   'الترقية / الباقات',
                                   alignment: AlignmentDirectional.centerStart,
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 12,
+                                  fontSize: 14,
                                 ),
                               ],
                             ),
                             CustomButton(
                                 text: "اشتراك",
-                                height: 25.h,
-                                width: 70.w,
+                                height: 32.h,
+                                width: 75.w,
+                                fontSize: 14,
                                 onTap: () {
                                   HomeVendorApis.homeVendorApis.getPlans();
-                                  Get.to(UpgradeAccountScreen());
+                                  Get.to(() => UpgradeAccountScreen());
                                 })
                           ],
                         ),
@@ -221,7 +222,7 @@ class StatisticsScreen extends StatelessWidget {
                                           width: 150.w,
                                           height: 80.h,
                                           padding:
-                                              EdgeInsetsDirectional.all(5.r),
+                                              EdgeInsets.symmetric(vertical: 0),
                                           decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadiusDirectional
@@ -241,35 +242,110 @@ class StatisticsScreen extends StatelessWidget {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
-                                              CustomText(
-                                                '${myShipModelData.title}',
-                                                fontColor: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                                alignment: AlignmentDirectional
-                                                    .centerStart,
-                                                fontSize: 12,
+                                              Container(
+                                                height: 25.h,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadiusDirectional
+                                                          .only(
+                                                              topStart: Radius
+                                                                  .circular(
+                                                                      10.r),
+                                                              topEnd: Radius
+                                                                  .circular(
+                                                                      10.r)),
+                                                  color: Colors.transparent
+                                                      .withOpacity(0.5),
+                                                ),
+                                                child: Center(
+                                                  child: CustomText(
+                                                    '${myShipModelData.title}',
+                                                    fontColor: Colors.white,
+                                                    textAlign: TextAlign.center,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 13,
+                                                  ),
+                                                ),
                                               ),
+
+                                              // Padding(
+                                              //   padding: const EdgeInsets.only(
+                                              //       top: 8),
+                                              //   child: Stack(
+                                              //     children: [
+                                              //       Align(
+                                              //         alignment:
+                                              //             Alignment.topRight,
+                                              //         child: SvgPicture.asset(
+                                              //           Assets.getIconSvg(
+                                              //               'path2'),
+                                              //           width: 20.w,
+                                              //           height: 25.h,
+                                              //           color: AppColors
+                                              //               .primaryColor
+                                              //               .withOpacity(0.6),
+                                              //           fit: BoxFit.cover,
+                                              //         ),
+                                              //       ),
+                                              //       Positioned(
+                                              //         right: 10,
+                                              //         top: 5,
+                                              //         child: Center(
+                                              //           child: CustomText(
+                                              //             '${myShipModelData.title}',
+                                              //             fontColor:
+                                              //                 Colors.white,
+                                              //             textAlign:
+                                              //                 TextAlign.center,
+                                              //             fontWeight:
+                                              //                 FontWeight.bold,
+                                              //             fontSize: 13,
+                                              //           ),
+                                              //         ),
+                                              //       ),
+
+                                              //       //             ),
+                                              //       //           ],
+                                              //       //         ),
+                                              //       //       ),
+                                              //       //     ),
+                                              //       //   ],
+                                              //       // ),
+                                              //     ],
+                                              //   ),
+                                              // ),
+
                                               Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.end,
                                                 children: [
-                                                  SmoothStarRating(
-                                                    allowHalfRating: false,
-                                                    onRated: (v) {},
-                                                    starCount: 5,
-                                                    rating: myShipModelData
-                                                                .rate ==
-                                                            null
-                                                        ? 0
-                                                        : double.parse(
-                                                            myShipModelData.rate
-                                                                .toString()),
-                                                    size: 15.r,
-                                                    isReadOnly: true,
-                                                    color: AppColors.yellow,
-                                                    borderColor:
-                                                        AppColors.yellow,
-                                                    spacing: 0.0,
+                                                  RatingBar.builder(
+                                                    initialRating:
+                                                        myShipModelData.rate ==
+                                                                null
+                                                            ? 0
+                                                            : double.parse(
+                                                                myShipModelData
+                                                                    .rate
+                                                                    .toString()),
+                                                    direction: Axis.horizontal,
+                                                    tapOnlyMode: true,
+                                                    ignoreGestures: true,
+                                                    allowHalfRating: true,
+                                                    itemCount: 5,
+                                                    itemSize: 16,
+                                                    itemPadding:
+                                                        const EdgeInsets
+                                                                .symmetric(
+                                                            horizontal: 1.0),
+                                                    itemBuilder: (context, _) =>
+                                                        const Icon(
+                                                      Icons.star,
+                                                      color: Colors.amber,
+                                                      size: 1,
+                                                    ),
+                                                    onRatingUpdate: (rating) =>
+                                                        null,
                                                   ),
                                                   SizedBox(width: 5.w),
                                                   CustomText(
@@ -345,8 +421,6 @@ class StatisticsScreen extends StatelessWidget {
                                         child: Container(
                                           width: 150.w,
                                           height: 80.h,
-                                          padding:
-                                              EdgeInsetsDirectional.all(5.r),
                                           decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadiusDirectional
@@ -366,23 +440,77 @@ class StatisticsScreen extends StatelessWidget {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
-                                              CustomText(
-                                                '${homeVendorController.getMyOfferData.value.data[index].title}',
-                                                fontColor: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                                alignment: AlignmentDirectional
-                                                    .centerStart,
-                                                fontSize: 12,
+                                              Container(
+                                                height: 25.h,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadiusDirectional
+                                                          .only(
+                                                              topStart: Radius
+                                                                  .circular(
+                                                                      10.r),
+                                                              topEnd: Radius
+                                                                  .circular(
+                                                                      10.r)),
+                                                  color: Colors.transparent
+                                                      .withOpacity(0.5),
+                                                ),
+                                                child: Center(
+                                                  child: CustomText(
+                                                    '${homeVendorController.getMyOfferData.value.data[index].title}',
+                                                    fontColor: Colors.white,
+                                                    textAlign: TextAlign.center,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 13,
+                                                  ),
+                                                ),
                                               ),
+
+                                              // Padding(
+                                              //   padding: const EdgeInsets.only(
+                                              //       top: 8),
+                                              //   child: Stack(
+                                              //     children: [
+                                              //       Align(
+                                              //         alignment:
+                                              //             Alignment.topRight,
+                                              //         child: SvgPicture.asset(
+                                              //           Assets.getIconSvg(
+                                              //               'path2'),
+                                              //           width: 20.w,
+                                              //           height: 25.h,
+                                              //           color: AppColors
+                                              //               .primaryColor
+                                              //               .withOpacity(0.6),
+                                              //           fit: BoxFit.cover,
+                                              //         ),
+                                              //       ),
+                                              //       Positioned(
+                                              //         right: 10,
+                                              //         top: 5,
+                                              //         child: Center(
+                                              //           child: CustomText(
+                                              //             '${homeVendorController.getMyOfferData.value.data[index].title}',
+                                              //             fontColor:
+                                              //                 Colors.white,
+                                              //             textAlign:
+                                              //                 TextAlign.center,
+                                              //             fontWeight:
+                                              //                 FontWeight.bold,
+                                              //             fontSize: 13,
+                                              //           ),
+                                              //         ),
+                                              //       ),
+                                              //     ],
+                                              //   ),
+                                              // ),
+
                                               Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.end,
                                                 children: [
-                                                  SmoothStarRating(
-                                                    allowHalfRating: false,
-                                                    onRated: (v) {},
-                                                    starCount: 5,
-                                                    rating: homeVendorController
+                                                  RatingBar.builder(
+                                                    initialRating: homeVendorController
                                                                 .getMyOfferData
                                                                 .value
                                                                 .data[index]
@@ -396,19 +524,31 @@ class StatisticsScreen extends StatelessWidget {
                                                                 .data[index]
                                                                 .rate
                                                                 .toString()),
-                                                    size: 15.r,
-                                                    isReadOnly: true,
-                                                    color: AppColors.yellow,
-                                                    borderColor:
-                                                        AppColors.yellow,
-                                                    spacing: 0.0,
+                                                    direction: Axis.horizontal,
+                                                    tapOnlyMode: true,
+                                                    ignoreGestures: true,
+                                                    allowHalfRating: true,
+                                                    itemCount: 5,
+                                                    itemSize: 16,
+                                                    itemPadding:
+                                                        const EdgeInsets
+                                                                .symmetric(
+                                                            horizontal: 1.0),
+                                                    itemBuilder: (context, _) =>
+                                                        const Icon(
+                                                      Icons.star,
+                                                      color: Colors.amber,
+                                                      size: 1,
+                                                    ),
+                                                    onRatingUpdate: (rating) =>
+                                                        null,
                                                   ),
                                                   SizedBox(width: 5.w),
                                                   CustomText(
                                                     '5.0',
                                                     fontColor: Colors.white,
                                                     fontWeight: FontWeight.bold,
-                                                    fontSize: 12,
+                                                    fontSize: 14,
                                                   ),
                                                 ],
                                               )

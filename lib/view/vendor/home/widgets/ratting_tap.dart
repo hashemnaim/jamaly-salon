@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:smooth_star_rating/smooth_star_rating.dart';
 import 'package:yacht_booking/common/app_colors.dart';
 import 'package:yacht_booking/common/assets.dart';
 import 'package:yacht_booking/common/helper.dart';
@@ -86,19 +86,26 @@ class RattingTap extends StatelessWidget {
                                               AlignmentDirectional.centerStart,
                                         ),
                                       ),
-                                      SmoothStarRating(
-                                        allowHalfRating: false,
-                                        onRated: (v) {},
-                                        starCount: 5,
-                                        rating: reviewVendorData.rate == null
+                                      RatingBar.builder(
+                                        initialRating: reviewVendorData.rate ==
+                                                null
                                             ? 0
                                             : double.parse(reviewVendorData.rate
                                                 .toString()),
-                                        size: 16.r,
-                                        isReadOnly: true,
-                                        color: AppColors.yellow,
-                                        borderColor: AppColors.yellow,
-                                        spacing: 0.0,
+                                        direction: Axis.horizontal,
+                                        tapOnlyMode: true,
+                                        ignoreGestures: true,
+                                        allowHalfRating: true,
+                                        itemCount: 5,
+                                        itemSize: 16,
+                                        itemPadding: const EdgeInsets.symmetric(
+                                            horizontal: 1.0),
+                                        itemBuilder: (context, _) => const Icon(
+                                          Icons.star,
+                                          color: Colors.amber,
+                                          size: 1,
+                                        ),
+                                        onRatingUpdate: (rating) => null,
                                       ),
                                     ],
                                   ),

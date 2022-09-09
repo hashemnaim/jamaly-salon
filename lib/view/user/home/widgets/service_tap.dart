@@ -36,9 +36,7 @@ class _ServiceTapState extends State<ServiceTap> {
                   child: Helper.loading(),
                 )
               : homeUserController.getServicesData.value.data.isEmpty
-                  ? Center(
-                      child: CustomText("No Services"),
-                    )
+                  ? CustomText("No Services")
                   : GridView.count(
                       padding: EdgeInsets.symmetric(
                           horizontal: 15.w, vertical: 15.h),
@@ -54,17 +52,13 @@ class _ServiceTapState extends State<ServiceTap> {
                               homeUserController
                                   .getServicesData.value.data[index];
                           return InkWell(
-                            onTap: () {
-                              HomeUserApis.homeUserApis.getOwnersService(
+                            onTap: () async {
+                              await HomeUserApis.homeUserApis.getOwnersService(
                                   servicesModelData.id.toString());
                               homeUserController.showAllServices.value =
                                   !homeUserController.showAllServices.value;
                               nameServices = servicesModelData.title;
                               setState(() {});
-                              // Get.to(ServiceProvidersService());
-                              //  HomeUserApis.homeUserApis.getShipDetails(
-                              //   servicesModelData.id.toString());
-                              //   Get.to(ReservationConfirmationScreen());
                             },
                             child: Container(
                               padding: EdgeInsetsDirectional.all(5.r),

@@ -10,7 +10,9 @@ class ShipsDetailsModel {
     code = json['code'];
     status = json['status'];
     message = json['message'];
-    data = json['data'] != null ? new ShipsDetailsModelData.fromJson(json['data']) : null;
+    data = json['data'] != null
+        ? new ShipsDetailsModelData.fromJson(json['data'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -35,6 +37,7 @@ class ShipsDetailsModelData {
   var offer;
   var rate;
   var price;
+  var price_for;
   var country;
   var locationLong;
   var locationLat;
@@ -42,7 +45,7 @@ class ShipsDetailsModelData {
   var updatedAt;
   var isFavourite;
   var notes;
-    var number_of_persones;
+  var number_of_persones;
   var start_date;
   var end_date;
   Owner owner;
@@ -59,13 +62,14 @@ class ShipsDetailsModelData {
       this.offer,
       this.rate,
       this.price,
+      this.price_for,
       this.country,
       this.notes,
       this.locationLong,
       this.locationLat,
       this.createdAt,
       this.updatedAt,
-     this.isFavourite,
+      this.isFavourite,
       this.owner,
       this.gallary,
       this.servicesShip});
@@ -79,10 +83,12 @@ class ShipsDetailsModelData {
     prepaid = json['prepaid'];
     notes = json['notes'];
     offer = json['offer'];
-    rate = json['rate'];  number_of_persones = json['number_of_persones'];
+    rate = json['rate'];
+    number_of_persones = json['number_of_persones'];
     start_date = json['start_date'];
     end_date = json['end_date'];
     price = json['price'];
+    price_for = json['price_for'];
     country = json['country'];
     locationLong = json['location_long'];
     locationLat = json['location_lat'];
@@ -285,6 +291,4 @@ class Services {
   }
 }
 
-
-class Galary{}
-
+class Galary {}

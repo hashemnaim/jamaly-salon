@@ -54,7 +54,7 @@ class MyShipModelData {
   var createdAt;
   var updatedAt;
   List<ServicesShip> servicesShip;
-  List<GallaryOwner> gallaryOwner;
+  List<GallaryOwner> galleryOwner;
 
   MyShipModelData(
       {this.id,
@@ -80,7 +80,7 @@ class MyShipModelData {
       this.createdAt,
       this.updatedAt,
       this.servicesShip,
-      this.gallaryOwner});
+      this.galleryOwner});
 
   MyShipModelData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -112,9 +112,9 @@ class MyShipModelData {
       });
     }
     if (json['gallary_owner'] != null) {
-      gallaryOwner = <GallaryOwner>[];
+      galleryOwner = <GallaryOwner>[];
       json['gallary_owner'].forEach((v) {
-        gallaryOwner.add(new GallaryOwner.fromJson(v));
+        galleryOwner.add(new GallaryOwner.fromJson(v));
       });
     }
   }
@@ -144,12 +144,10 @@ class MyShipModelData {
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
     if (this.servicesShip != null) {
-      data['services_ship'] =
-          this.servicesShip.map((v) => v.toJson()).toList();
+      data['services_ship'] = this.servicesShip.map((v) => v.toJson()).toList();
     }
-    if (this.gallaryOwner != null) {
-      data['gallary_owner'] =
-          this.gallaryOwner.map((v) => v.toJson()).toList();
+    if (this.galleryOwner != null) {
+      data['gallary_owner'] = this.galleryOwner.map((v) => v.toJson()).toList();
     }
     return data;
   }

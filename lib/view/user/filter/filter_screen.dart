@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -45,7 +47,6 @@ class _FilterScreenState extends State<FilterScreen> {
     "300",
     "400",
     "500",
-    "500",
     "600",
     "700",
     "800",
@@ -53,11 +54,13 @@ class _FilterScreenState extends State<FilterScreen> {
     "1000",
   ];
   List<String> listCountry = [
-    "الامارات",
+    'أبوظبي',
+    "عجمان",
     "دبي",
-    "السعودية",
-    "فلسطين",
-    "مصر",
+    "الفجيرة",
+    "رأس الخيمة",
+    "الشارقة",
+    "أم القيوين",
   ];
   List<String> listRate = [
     "1",
@@ -77,8 +80,8 @@ class _FilterScreenState extends State<FilterScreen> {
           children: [
             Container(
               width: double.infinity,
-              height: 155.h,
-              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 20.h),
+              height: 159.h,
+              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage(
@@ -147,7 +150,7 @@ class _FilterScreenState extends State<FilterScreen> {
                                                   .id
                                                   .toString(),
                                             );
-                                            Get.to(ChatScreenProvider());
+                                            Get.to(() => ChatScreenProvider());
                                           },
                                           child: Container(
                                             padding:
@@ -181,7 +184,7 @@ class _FilterScreenState extends State<FilterScreen> {
                                           onTap: () {
                                             HomeVendorApis.homeVendorApis
                                                 .getNotifications();
-                                            Get.to(NotificationScreen());
+                                            Get.to(() => NotificationScreen());
                                           },
                                           child: Container(
                                             padding:
@@ -270,6 +273,10 @@ class _FilterScreenState extends State<FilterScreen> {
                     prefixIcon: Icon(Icons.search),
                     isBorderSide: false,
                     isBoxShadow: false,
+                    onSaved: (v) {
+                      print(v);
+                    },
+                    // onFieldSubmitted: () {},
                   ),
                   SizedBox(height: 60.h),
                   Container(
@@ -295,31 +302,37 @@ class _FilterScreenState extends State<FilterScreen> {
                           backgroundColor: Colors.white,
                           fontColor: AppColors.fontPrimaryColor,
                           onChanged: (val) {
+                            log(val);
                             country = val;
                             setState(() {});
                           },
                         ),
+
                         SizedBox(height: 10.h),
                         homeUserController.getServicesData.value.data == null
                             ? Helper.loading()
                             : CustomDropDownNet(
                                 value: service,
-                                itemsList: homeUserController
-                                    .getServicesData.value.data,
-                                hint: 'الخدمات',
-                                height: 50,
-                                fontSize: 13,
                                 backgroundColor: Colors.white,
                                 fontColor: AppColors.fontPrimaryColor,
+                                itemsList: homeUserController
+                                    .getServicesData.value.data,
+                                hint: 'الخدمات' +
+                                    '                                   ' +
+                                    '                                   ' +
+                                    '              ',
+                                height: 50,
+                                fontSize: 13,
                                 onChanged: (val) {
-                              
                                   service = val;
                                   setState(() {});
                                 },
                               ),
                         SizedBox(height: 10.h),
                         CustomDropDown(
-                          value: price,
+                          value:
+                              // listPrice[0],
+                              price,
                           itemsList: listPrice,
                           hint: "السعر",
                           height: 50,
@@ -327,6 +340,7 @@ class _FilterScreenState extends State<FilterScreen> {
                           backgroundColor: Colors.white,
                           fontColor: AppColors.fontPrimaryColor,
                           onChanged: (val) {
+                            log(val);
                             price = val;
                             setState(() {});
                           },
@@ -374,6 +388,8 @@ class _FilterScreenState extends State<FilterScreen> {
                       if (service == null) {
                         Helper.getSheetError('الرجاء اختيار الخدمة');
                       } else {
+                        log(service.id.toString());
+                        log(price);
                         HomeUserApis.homeUserApis
                             .searchShips(service.id.toString(), price, rate);
                         homeUserController.tabController.animateTo(2);

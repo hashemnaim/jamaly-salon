@@ -1,7 +1,5 @@
-import 'package:fancy_bottom_bar/fancy_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:yacht_booking/common/app_colors.dart';
@@ -39,84 +37,80 @@ class BottomNavBarScreen extends StatelessWidget {
       builder: (controller) => Scaffold(
         resizeToAvoidBottomInset: false,
         body: _buildScreens[controller.selectedIndex],
-        bottomNavigationBar: SafeArea(
-          child: Container(
-            height: 65,
-            decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey[300],
-                  offset: Offset(0, -10),
-                  blurRadius: 8,
-                  spreadRadius: 1,
-                  blurStyle: BlurStyle.normal,
-                ),
-              ],
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(30.r),
-                topRight: Radius.circular(30.r),
+        bottomNavigationBar: Container(
+          height: 72.h,
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey[200],
+                offset: Offset(0, -5),
+                blurRadius: 5,
+                spreadRadius: 1,
+                blurStyle: BlurStyle.normal,
               ),
+            ],
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30.r),
+              topRight: Radius.circular(30.r),
             ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(30.r),
-                topRight: Radius.circular(30.r),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30.r),
+              topRight: Radius.circular(30.r),
+            ),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
               ),
-              child: Container(
-                height: 65,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                ),
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.w),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: List.generate(
-                      4,
-                      (index) => InkWell(
-                        onTap: () {
-                          controller.changeSelectedIndex(index);
-                        },
-                        child: Container(
-                          width: 65,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset(
-                                _itemsSvgIcon[index],
-                                alignment: AlignmentDirectional.center,
-                                fit: BoxFit.contain,
-                                height: 22.r,
-                                width: 22.r,
-                                color: controller.selectedIndex == index
-                                    ? AppColors.primaryColor
-                                    : Colors.black,
-                              ),
-                              SizedBox(height: 3.h),
-                              CustomText(
-                                _itemsTitle[index],
-                                height: 1.4,
-                                fontSize: 11,
-                                fontWeight: FontWeight.bold,
-                                fontColor: controller.selectedIndex == index
-                                    ? AppColors.primaryColor
-                                    : Colors.black,
-                              ),
-                              SizedBox(height: 5.h),
-                              controller.selectedIndex == index
-                                  ? Container(
-                                      width: 6.r,
-                                      height: 6.r,
-                                      decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(3.0),
-                                        color: AppColors.primaryColor,
-                                      ),
-                                    )
-                                  : SizedBox(),
-                            ],
-                          ),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10.w),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: List.generate(
+                    4,
+                    (index) => InkWell(
+                      onTap: () {
+                        controller.changeSelectedIndex(index);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 4.5),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              _itemsSvgIcon[index],
+                              alignment: AlignmentDirectional.center,
+                              fit: BoxFit.contain,
+                              height: 22.r,
+                              width: 22.r,
+                              color: controller.selectedIndex == index
+                                  ? AppColors.primaryColor
+                                  : Colors.black,
+                            ),
+                            SizedBox(height: 3.h),
+                            CustomText(
+                              _itemsTitle[index],
+                              height: 1.4,
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                              fontColor: controller.selectedIndex == index
+                                  ? AppColors.primaryColor
+                                  : Colors.black,
+                            ),
+                            SizedBox(height: 5.h),
+                            controller.selectedIndex == index
+                                ? Container(
+                                    width: 6.r,
+                                    height: 6.r,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(3.0),
+                                      color: AppColors.primaryColor,
+                                    ),
+                                  )
+                                : SizedBox(),
+                          ],
                         ),
                       ),
                     ),

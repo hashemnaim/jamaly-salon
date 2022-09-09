@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -7,6 +9,7 @@ import 'package:yacht_booking/common/assets.dart';
 import 'package:yacht_booking/controller/user/home_user_controller.dart';
 import 'package:yacht_booking/view/widgets/custom_text.dart';
 
+import '../../../apis/home_vendor_apis.dart';
 import 'widgets/all_tap.dart';
 import 'widgets/header_widget.dart';
 import 'widgets/service_providers_tap.dart';
@@ -21,43 +24,40 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
-  // TabController _tabController;
-  //final BottomNavBarController _bottomNavBarController = Get.find();
   HomeUserController homeUserController = Get.find();
   final List<Widget> _tabs = [
-    // Text(
-    //   'الكل',
-    //   style: TextStyle(
-    //     fontSize: 13.sp,
-    //     fontWeight: FontWeight.bold,
-    //   ),
-    // ),
-    SvgPicture.asset(
-      Assets.getIconSvg('home'),
-      width: 20.w,
-      height: 20.h,
-      fit: BoxFit.contain,
+    Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: SvgPicture.asset(Assets.getIconSvg('home'),
+          width: 20.w, height: 20.h, fit: BoxFit.contain),
     ),
-    CustomText(
-      'الخدمات',
-      fontSize: 12.0,
-      fontColor: const Color(0xFF161617).withOpacity(0.5),
-      fontWeight: FontWeight.w600,
-      // height: 1.25,
+    Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      child: CustomText(
+        'الخدمات',
+        fontSize: 13,
+        fontColor: Colors.black,
+        fontWeight: FontWeight.bold,
+      ),
     ),
-    CustomText(
-      'مزودي الخدمه',
-      fontSize: 12.0,
-      fontColor: const Color(0xFF161617).withOpacity(0.5),
-      fontWeight: FontWeight.w600,
-      // height: 1.25,
+    Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      child: CustomText(
+        'مزودي الخدمه',
+        fontSize: 13,
+        fontColor: Colors.black,
+        fontWeight: FontWeight.bold,
+      ),
     ),
-    CustomText(
-      'عروض مميزة',
-      fontSize: 12.0,
-      fontColor: const Color(0xFF161617).withOpacity(0.5),
-      fontWeight: FontWeight.w600,
-      // height: 1.25,
+    Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      child: CustomText(
+        'عروض مميزة',
+        fontSize: 13,
+        fontColor: Colors.black,
+        fontWeight: FontWeight.bold,
+        // height: 1.25,
+      ),
     ),
   ];
   final List<Widget> _childrenTabBar = <Widget>[
@@ -90,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             children: [
               HeaderWidget(),
               Container(
-                height: 45.h,
+                height: 50.h,
                 width: double.infinity,
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -101,16 +101,26 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   ),
                 ),
                 child: Align(
-                  alignment: AlignmentDirectional.bottomCenter,
+                  alignment: AlignmentDirectional.bottomStart,
                   child: TabBar(
+                    automaticIndicatorColorAdjustment: false,
                     unselectedLabelColor: Colors.black,
                     indicatorColor: AppColors.primaryColor,
                     labelColor: AppColors.primaryColor,
                     indicatorSize: TabBarIndicatorSize.label,
                     indicatorWeight: 3.w,
+                    labelStyle: TextStyle(fontWeight: FontWeight.bold),
+                    unselectedLabelStyle:
+                        TextStyle(fontWeight: FontWeight.bold),
                     isScrollable: true,
+                    padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
                     controller: controller.tabController,
                     tabs: _tabs,
+                    onTap: (index) {
+                      if (index == 2) {
+                        HomeVendorApis.homeVendorApis.getVendorServices();
+                      }
+                    },
                   ),
                 ),
               ),

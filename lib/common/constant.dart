@@ -16,49 +16,8 @@ List<Map<String, dynamic>> citys = [
   {'id': 7, 'name': '	أم القيوين'},
 ];
 
-Future<File> getImagePicker(ImageSource imageSource) async {
-  final pickedFile = await ImagePicker().pickImage(source: imageSource);
-
-  try {
-    File croppedFile = await ImageCropper().cropImage(
-        sourcePath: pickedFile.path,
-        aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
-        aspectRatioPresets: Platform.isAndroid
-            ? [
-                CropAspectRatioPreset.square,
-                CropAspectRatioPreset.ratio3x2,
-                CropAspectRatioPreset.original,
-                CropAspectRatioPreset.ratio4x3,
-                CropAspectRatioPreset.ratio16x9
-              ]
-            : [
-                CropAspectRatioPreset.original,
-                CropAspectRatioPreset.square,
-                CropAspectRatioPreset.ratio3x2,
-                CropAspectRatioPreset.ratio4x3,
-                CropAspectRatioPreset.ratio5x3,
-                CropAspectRatioPreset.ratio5x4,
-                CropAspectRatioPreset.ratio7x5,
-                CropAspectRatioPreset.ratio16x9
-              ],
-        androidUiSettings: AndroidUiSettings(
-            toolbarTitle: 'Cropper',
-            toolbarColor: AppColors.primaryColor,
-            toolbarWidgetColor: Colors.white,
-            initAspectRatio: CropAspectRatioPreset.original,
-            lockAspectRatio: false),
-        iosUiSettings: IOSUiSettings(
-          title: 'Cropper',
-        ));
-
-    return croppedFile;
-  } catch (e) {
-    return null;
-  }
-}
-
 //=========== Base Url ===========================
-String baseUrl = 'http://api.baharfun.com/api';
+String baseUrl = 'https://api.baharfun.com/api';
 
 //=========== User Url ===========================
 //=========== Auth User Url ===========================

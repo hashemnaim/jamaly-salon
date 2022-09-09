@@ -13,12 +13,12 @@ class CustomDropDownNet extends StatelessWidget {
   final Function(dynamic value) onChanged;
   final double height;
   final double fontSize;
-  final Color backgroundColor, fontColor,borderColor,iconColor;
+  final Color backgroundColor, fontColor, borderColor, iconColor;
 
   const CustomDropDownNet({
     @required this.value,
     @required this.itemsList,
-    this.hint ,
+    this.hint,
     this.dropdownColor,
     @required this.onChanged,
     this.height = 40,
@@ -38,8 +38,7 @@ class CustomDropDownNet extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.r),
           color: backgroundColor,
-          border: Border.all(color: borderColor
-          ),
+          border: Border.all(color: borderColor),
           // boxShadow: AppColors.boxShadow,
         ),
         child: DropdownButtonHideUnderline(
@@ -51,11 +50,10 @@ class CustomDropDownNet extends StatelessWidget {
               hint: Container(
                 child: CustomText(
                   hint,
-                  fontColor: Colors.grey[400],
+                  fontColor: Colors.grey[800],
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              
               icon: Icon(
                 Icons.keyboard_arrow_down,
                 color: iconColor,
@@ -65,7 +63,8 @@ class CustomDropDownNet extends StatelessWidget {
               value: value,
               items: itemsList
                   .map(
-                    (ServicesModelData item) => DropdownMenuItem<ServicesModelData>(
+                    (ServicesModelData item) =>
+                        DropdownMenuItem<ServicesModelData>(
                       value: item,
                       child: CustomText(
                         item.title,

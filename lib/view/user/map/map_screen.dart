@@ -15,7 +15,6 @@ import 'package:yacht_booking/view/widgets/custom_text_form_field.dart';
 import 'widgets/map_card.dart';
 
 class MapScreen extends StatefulWidget {
- 
   @override
   _MapScreenState createState() => _MapScreenState();
 }
@@ -34,7 +33,6 @@ class _MapScreenState extends State<MapScreen> {
   searchandNavigate(String searchAddress) async {
     try {
       FocusScope.of(context).unfocus();
-     
 
       List<Location> result =
           await locationFromAddress(searchAddress, localeIdentifier: 'en_US');
@@ -116,15 +114,13 @@ class _MapScreenState extends State<MapScreen> {
               HomeUserApis.homeUserApis.getOwnerDetails(homeUserController
                   .getAllOwnersData.value.data[i].id
                   .toString());
-              Get.to(CompanyDetailsScreen());
+              Get.to(() => CompanyDetailsScreen());
             },
           ));
         }
       }
       setState(() {});
-    } catch (e) {
-    
-    }
+    } catch (e) {}
   }
 
   getPlaceName(LatLng position) async {
@@ -148,7 +144,7 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   void updatePosition(CameraPosition _position) {
-     lat = _position.target.latitude;
+    lat = _position.target.latitude;
     long = _position.target.longitude;
 
     setState(() {});
@@ -217,7 +213,15 @@ class _MapScreenState extends State<MapScreen> {
                       child: CustomTextFormField(
                         hintText: 'البحث',
                         textEditingController: textEditingController,
+                        textInputAction: TextInputAction.search,
+                        isComplate: true,
                         onSaved: (value) {},
+                        onFieldSubmitted: () {
+                          try {
+                            FocusScope.of(context).unfocus();
+                            searchandNavigate(textEditingController.text);
+                          } catch (e) {}
+                        },
                         suffixIcon: InkWell(
                           onTap: () {
                             try {

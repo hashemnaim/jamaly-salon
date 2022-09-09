@@ -24,6 +24,8 @@ import 'package:yacht_booking/models/vendor_service.dart';
 import 'package:yacht_booking/services/progress_dialog_utils.dart';
 import 'package:yacht_booking/services/sp_helper.dart';
 
+import '../models/search_ship_model.dart';
+
 class HomeUserApis {
   HomeUserApis._();
 
@@ -67,13 +69,18 @@ class HomeUserApis {
       if (response.data['code'].toString() == '200') {
         homeUserControllerw.getProfileUserData.value =
             ProfileModel.fromJson(response.data);
+        log(homeUserControllerw.getProfileUserData.value.data
+            .toJson()
+            .toString());
         chatGetProvider.getProfileUserData.value =
             ProfileModel.fromJson(response.data);
       } else {
         homeUserControllerw.getProfileUserData.value =
             ProfileModel.fromJson({});
       }
-    } catch (e) {}
+    } catch (e) {
+      ProgressDialogUtils.hide();
+    }
   }
 
   getTerms() async {
@@ -210,6 +217,7 @@ class HomeUserApis {
   //===========================================
   getOwnerDetails(String shipId) async {
     try {
+      log(shipId.toString());
       initDio();
       homeUserControllerw.getOwnerDetalsData.value =
           OwnerDetailsModel.fromJson({});
@@ -221,9 +229,9 @@ class HomeUserApis {
             'Accept': '*/*',
             'Authorization': 'Bearer $token',
           },
-          validateStatus: (status) {
-            return status < 500;
-          },
+          // validateStatus: (status) {
+          //   return status < 500;
+          // },
         ),
       );
       if (response.data['code'].toString() == '200') {
@@ -233,8 +241,11 @@ class HomeUserApis {
         homeUserControllerw.getOwnerDetalsData.value =
             OwnerDetailsModel.fromJson({});
       }
-    } catch (e) {}
+    } catch (e) {
+      log(e);
+    }
   }
+  //===========================================
 
   getOwnersServiceByCategoryId(String categoryId) async {
     try {
@@ -275,15 +286,17 @@ class HomeUserApis {
   //===========================================
   getOwnersService(String serviceId) async {
     try {
+      print(serviceId);
       initDio();
       homeUserControllerw.getVendorsServiceData.value =
           VendorsService.fromJson({});
       FormData data = FormData.fromMap({
-        'service_id': serviceId,
+        'service': serviceId,
       });
       String token = await SPHelper.spHelper.getToken();
+      log(serviceId);
       Response response = await dio.post(
-        baseUrl + getOwnersServiceEndPoint,
+        baseUrl + searchShipsEndPoint,
         data: data,
         options: Options(
           headers: {
@@ -295,12 +308,15 @@ class HomeUserApis {
           },
         ),
       );
+      log(response.data.toString());
+
       if (response.data['code'].toString() == '200') {
-        homeUserControllerw.getVendorsServiceData.value =
-            VendorsService.fromJson(response.data);
+        homeUserControllerw.searchShipsModel.value =
+            SearchShipsModel.fromJson(response.data);
+        log(homeUserControllerw.searchShipsModel.value.toJson().toString());
       } else {
-        homeUserControllerw.getVendorsServiceData.value =
-            VendorsService.fromJson({});
+        homeUserControllerw.searchShipsModel.value =
+            SearchShipsModel.fromJson({});
       }
     } catch (e) {}
   }
@@ -308,6 +324,7 @@ class HomeUserApis {
   //===========================================
   getShipDetails(String shipId) async {
     try {
+      log(shipId);
       initDio();
 
       homeUserControllerw.shipsDetaileData.value =
@@ -328,6 +345,8 @@ class HomeUserApis {
       if (response.data['code'].toString() == '200') {
         homeUserControllerw.shipsDetaileData.value =
             ShipsDetailsModel.fromJson(response.data);
+
+        log(homeUserControllerw.shipsDetaileData.value.toJson().toString());
       } else {
         homeUserControllerw.shipsDetaileData.value =
             ShipsDetailsModel.fromJson({});
@@ -683,7 +702,6 @@ class HomeUserApis {
         baseUrl + getBookingsEndPoint,
         options: Options(
           headers: {
-            'Accept': '*/*',
             'Authorization': 'Bearer $token',
           },
           validateStatus: (status) {
